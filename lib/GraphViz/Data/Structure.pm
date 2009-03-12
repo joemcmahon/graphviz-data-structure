@@ -9,7 +9,7 @@ use Devel::Peek;
 
 our $Debug = 0;
 
-sub debug(@) {
+sub _debug(@) {
   return unless $Debug;
   return unless @_;
   print STDERR @_;
@@ -17,7 +17,7 @@ sub debug(@) {
 }
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 # The currently-supported color palettes.
 our %palettes = (
@@ -293,7 +293,8 @@ be passed on to C<GraphViz>.
                                    graph=>{label=>'My graph',
                                            fontname=>'Helvetica'}
                                   );
-=back
+
+=back 
 
 =cut
 
@@ -528,7 +529,7 @@ sub init {
 
   # If we've exceeded the depth limit, just return a plaintext "..." node.
   if (defined $self->{Depth} and $rank > $self->{Depth}) {
-    debug("Dummy node\n");
+    _debug("Dummy node\n");
     my $node_type = sprintf("DUMMY(%08X)",0+$self->{Dummies}++);
     my $node_label = $node_type; 
     my $name = "gvds_dummy" . $self->{Dummies}++;
@@ -558,19 +559,19 @@ sub init {
     my $node_label = ref $root;
     my @to_port = ();
     
-    debug("Label: $node_label\n");
+    _debug("Label: $node_label\n");
 
     # Just a scalar, not a scalar ref. Generate a plaintext node.
     # Yes, this one *should* be node_label, not node_type.
     $node_label =~ /^$/ and do {
-      debug("Atomic node\n");
+      _debug("Atomic node\n");
       my $hookup_info = undef;
       $hookup_info = $self->{Addresses}->{$root} if defined $root;
       return @$hookup_info if defined $hookup_info;
 
       my $name = "gvds_atom" . $self->{Atoms}++;
       $self->{Graph}->add_node($name,
-                               label=>$self->dot_escape($root),
+                               label=>$self->_dot_escape($root),
                                @rank,
                                shape=>"plaintext");
       $self->{NodeCache}->{$name} = [$name, ()];
@@ -586,7 +587,7 @@ sub init {
       print "Regex $node_type parsed as: $regexp (+$flagson, -$flagsoff)\n" if $Debug;
       my $name = "gvds_atom" . $self->{Atoms}++;
       $self->{Graph}-> add_node($name,
-                                label=>$self->dot_escape("qr/$regexp/$flagson"),
+                                label=>$self->_dot_escape("qr/$regexp/$flagson"),
                                 @rank,
                                 shape=>"plaintext");
       $self->{NodeCache}->{name}            = [$name, ()];
@@ -596,7 +597,7 @@ sub init {
 
     # Scalar reference.
     $node_type =~ /SCALAR|REF/ and do {
-      debug("Scalar node\n");
+      _debug("Scalar node\n");
       my $name = "gvds_scalar" . $self->{Scalars}++;
       # If linkthrough is on, just skip this node and go down a level directly.
       # Do not increment the rank since we've skipped a level. This is needed
@@ -608,7 +609,7 @@ sub init {
 
       # Add the node for the scalar itself.
       $self->{Graph}->add_node($name,
-                               label=>$self->scalar_port($node_type, $root),
+                               label=>$self->_scalar_port($node_type, $root),
                                'shape' => 'record',
                                'color' => $self->{Colors}->{Scalar},
                                'style' => 'filled',
@@ -639,21 +640,21 @@ sub init {
     # Array reference. Generate a lst of ports as long as this array is, and
     # create the nodes under it, linking them to the proper ports.
     $node_type =~ /ARRAY/ and do {
-      debug("Array node\n");
+      _debug("Array node\n");
       my $name = "gvds_array" . $self->{Arrays}++;
 
       # Add node for the array itself.
       if (@$root == 0 && !blessed($root)) {
         # Empty unblessed array.
         $self->{Graph}->add_node($name, 
-                                 label=>$self->array_ports($node_type,$root),
+                                 label=>$self->_array_ports($node_type,$root),
                                  @rank,
                                  shape=> 'plaintext');
       }
       else {
         # Blessed and/or non-empty.
         $self->{Graph}->add_node($name, 
-                                 label=>$self->array_ports($node_type,$root),
+                                 label=>$self->_array_ports($node_type,$root),
                                  @rank,
                                  shape=> 'record',
                                  'color' => $self->{Colors}->{Array},
@@ -695,12 +696,12 @@ sub init {
     # entries  that contain references. Generate the nodes below (if any) and
     # hook them back in.
     $node_type =~ /HASH/ and do {
-      debug("Hash node\n");
+      _debug("Hash node\n");
       my $name = "gvds_hash" . $self->{Hashes}++;
       if (scalar keys %$root == 0 && !blessed($root)) {
         # Empty hash.
         $self->{Graph}->add_node($name, 
-                                 label=>$self->hash_ports($node_type, $root), 
+                                 label=>$self->_hash_ports($node_type, $root), 
                                  @rank,
                                  shape=>'plaintext'
                                  );
@@ -708,7 +709,7 @@ sub init {
       else {
         # Non-empty and/or blessed hash.
         $self->{Graph}->add_node($name, 
-                                 label=>$self->hash_ports($node_type, $root), 
+                                 label=>$self->_hash_ports($node_type, $root), 
                                  @rank,
                                  shape=>'record',
                                  'color' => $self->{Colors}->{Hash},
@@ -744,11 +745,11 @@ sub init {
     # Code reference. We call a modified version of dumpvar.pl, then insert
     # a plaintext node containing the package and name.
     $node_type =~ /CODE/ and do {
-      debug("Code node\n");
+      _debug("Code node\n");
       my $name = "gvds_sub" . $self->{Subs}++;
-      my $label = dumpsub(0,$root);
+      my $label = _dumpsub(0,$root);
       $self->{Graph}->add_node($name,
-                               label=>$self->code_label($root, $label),
+                               label=>$self->_code_label($root, $label),
                                @rank,
                                shape=>"plaintext");
       $self->{NodeCache}->{$name}          = [$name, ()];  
@@ -760,11 +761,11 @@ sub init {
     # glob, and then recurse on it just like you would normally for a hash.
     $node_label =~ /GLOB/ and do {
       my $name = "gvds_glob" . $self->{Globs}++;
-      my ($fake_glob, $label) = dumpglob($root);
+      my ($fake_glob, $label) = _dumpglob($root);
       if (ref $fake_glob) {
         bless $fake_glob, $label;
         $self->{Graph}-> add_node($name,
-				  label=> $self->glob_ports($label,$fake_glob),
+				  label=> $self->_glob_ports($label,$fake_glob),
 				  @rank,
                                   'color' => $self->{Colors}->{Glob},
                                   'style' => 'filled',
@@ -779,7 +780,7 @@ sub init {
 	my $port = 2;
 	foreach my $subnode (sort keys %$fake_glob) {
 	  # Same logic as above: if the value is scalar, we don't want to
-	  # crawl down, because hash_ports will have caught it. Otherwise,
+	  # crawl down, because _hash_ports will have caught it. Otherwise,
 	  # crawl down, generate the nodes below, and link them back in.
 	  # We go by twos because the keys have the odd ports and the values
 	  # the even ones; we want links to come from the values.
@@ -799,7 +800,7 @@ sub init {
       # Otherwise, it was an empty glob. Just print the string for it.
       else {
         $self->{Graph}->add_node($name,
-                                 label=>$self->code_label($root, $label),
+                                 label=>$self->_code_label($root, $label),
                                  @rank,
                                  shape=>"plaintext");
         $self->{NodeCache}->{$name}          = [$name, ()];
@@ -894,19 +895,19 @@ class name on top, tagged appropriately, and the value on the bottom.
 
 =cut
 
-sub scalar_port {
+sub _scalar_port {
   my ($self, $label, $scalar) = @_;
   my $out;
   if (defined (my $here = blessed($label))) {
      # Blessed scalar. Add name.
      $out = "{{<port0>$here\n[Scalar object]}|{<port1>" .
-              (ref $scalar ? "." : $self->dot_escape($scalar)) ."}}";
+              (ref $scalar ? "." : $self->_dot_escape($scalar)) ."}}";
   }
   else {
     # Not blessed.
     $out = "";
   }
-  debug("$out\n");
+  _debug("$out\n");
   $out;
 }
 =head2 ARRAYS
@@ -962,7 +963,7 @@ it's empty explicitly.
 
 =cut
 
-sub array_ports {
+sub _array_ports {
   my ($self, $label, $array) = @_;
   local $_;
   my @ports = ();
@@ -992,7 +993,7 @@ sub array_ports {
       $cleanvalue = "<port1>.";
     }
     else {
-      $cleanvalue = "<port1>" . $self->dot_escape($v);
+      $cleanvalue = "<port1>" . $self->_dot_escape($v);
     }
     my $basic;
     if (!$label_needed) {
@@ -1013,7 +1014,7 @@ sub array_ports {
 
   foreach (@$array) {
     ref $_ ? (push @ports, "{<port$port>.}") 
-           :  push @ports, "{<port$port>" . $self->dot_escape($_) . "}";
+           :  push @ports, "{<port$port>" . $self->_dot_escape($_) . "}";
     $port++;
   }
 
@@ -1032,7 +1033,7 @@ sub array_ports {
       $array_ports = "{<port0>$label_needed\n[Array object]|{" . (join "|", @ports) . "}}";
     }
   }
-  debug("$array_ports\n");
+  _debug("$array_ports\n");
   $array_ports;
 }
 
@@ -1122,17 +1123,17 @@ We construct a tiny pair of wrapper methods which add the necessary information 
 
 =cut
 
-sub hash_ports {
+sub _hash_ports {
   my $self = shift;
-  $self->hash_or_glob_ports("Hash",@_);
+  $self->_hash_or_glob_ports("Hash",@_);
 }
 
-sub glob_ports {
+sub _glob_ports {
   my $self = shift;
-  $self->hash_or_glob_ports("Glob",@_);
+  $self->_hash_or_glob_ports("Glob",@_);
 }
 
-sub hash_or_glob_ports {
+sub _hash_or_glob_ports {
   my ($self, $type, $label, $hash) = @_;
   local $_;
   my @ports = ();
@@ -1168,7 +1169,7 @@ sub hash_or_glob_ports {
   # as a pair of boxes.
   if (scalar keys %$hash == 1 and !$label_needed) {
     # (keys %$hash)[0] gets the only key there is.
-    my $cleankey = "<port1>" . $self->dot_escape((keys %$hash)[0]);
+    my $cleankey = "<port1>" . $self->_dot_escape((keys %$hash)[0]);
     my $cleanvalue;
     my $v = (values %$hash)[0];
     if (ref $v) {
@@ -1177,7 +1178,7 @@ sub hash_or_glob_ports {
     }
     else {
       # There's a real value here.
-      $cleanvalue = "<port2>" . $self->dot_escape($v);
+      $cleanvalue = "<port2>" . $self->_dot_escape($v);
     }
     my $basic;
     $basic = "{$cleankey|$cleanvalue}";
@@ -1214,12 +1215,12 @@ sub hash_or_glob_ports {
     $port = 1;
     foreach my $k (sort keys %$hash) {
       my $v = $hash->{$k};
-      $sets[0] .= "<port$port>" . $self->dot_escape($k) . "|"; $port++;
+      $sets[0] .= "<port$port>" . $self->_dot_escape($k) . "|"; $port++;
       if (ref $v) {
         $sets[1] .= "<port$port>.|"; $port++;
       }
       else {
-        $sets[1] .= "<port$port>" . $self->dot_escape($v) . "|"; $port++;
+        $sets[1] .= "<port$port>" . $self->_dot_escape($v) . "|"; $port++;
       }
     }
     chop @sets;
@@ -1230,13 +1231,13 @@ sub hash_or_glob_ports {
     $port = 1;
     foreach my $k (sort keys %$hash) {
       my $v = $hash->{$k};
-      my $cleankey = "<port$port>" . $self->dot_escape($k); $port++;
+      my $cleankey = "<port$port>" . $self->_dot_escape($k); $port++;
       my $cleanvalue;
       if (ref $v) {
         $cleanvalue = "<port$port>."; $port++;
       }
       else {
-        $cleanvalue = "<port$port>" . $self->dot_escape($v); $port++;
+        $cleanvalue = "<port$port>" . $self->_dot_escape($v); $port++;
       }
       push @sets, "$cleankey|$cleanvalue";
     }
@@ -1283,7 +1284,7 @@ further.
 
 =cut
 
-sub code_label {
+sub _code_label {
   my ($self, $root, $label) = @_;
   my $out;
   if (defined (my $here = blessed($label))) {
@@ -1294,7 +1295,7 @@ sub code_label {
     # Not blessed.
     $out = "$label";
   }
-  debug("$out\n");
+  _debug("$out\n");
   $out;
 }
 
@@ -1306,14 +1307,14 @@ if the text contains characters which it considers significant in constructing
 labels and the like. 
 
 It is necessary to clean up and shorten any text that C<dot> will be expected
-to put into a node. The C<dot_escape> method is used to do this.
+to put into a node. The C<_dot_escape> method is used to do this.
 
 Note that the limit on strings is actually not very large; setting a really
 big C<Fuzz> will probably make C<dot> segfault when it tries to draw your graph.
 
 =cut
 
-sub dot_escape {
+sub _dot_escape {
   my ($self, $string) = @_;
   my ($first,$rest) = ($string,"");
   return "undef" unless defined $string;
@@ -1328,7 +1329,7 @@ sub dot_escape {
 
   # clean up characters significant to dot
   $first =~ s/([^?\-a-zA-Z0-9.=_(){}<>\/:* \n])/\\$1/g;
-  debug("$first\n");
+  _debug("$first\n");
   $first;
 }
 
@@ -1358,7 +1359,7 @@ extracting the package and name from it.
 
 =cut
 
-sub dumpsub {
+sub _dumpsub {
   my ($off,$sub) = @_;
   my $ini = $sub;
   $sub = $1 if $sub =~ /^\{\*(.*)\}$/;
@@ -1393,7 +1394,7 @@ A glob should I<look> sort of like a blessed hash when it's output: there's
 a name, which is the name of the glob (*main::Foo); there's a set of "keys"
 corresponding to the items that are defined in the glob; and there are all
 the things pointed to by the glob, which C<init> can already handle. Since
-it also can already format a blessed hash (C<hash_ports>), why not reuse
+it also can already format a blessed hash (C<_hash_ports>), why not reuse
 the code?
 
 What we do is create an anonymous hash and plug all the pointers into it.
@@ -1411,7 +1412,7 @@ a hash.
 
 =cut
 
-sub dumpglob {
+sub _dumpglob {
   my ($glob) = @_;
   my ($key, $val) = ("{$$glob}", $$glob);
   my $returns = {};

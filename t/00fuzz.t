@@ -14,13 +14,13 @@ my($foo, $s);
 $gvds = GraphViz::Data::Structure->new(1, Fuzz=>4);
 
 $foo = undef;
-$s = $gvds->dot_escape($foo);
+$s = $gvds->_dot_escape($foo);
 is($s, "undef");
 
 $foo = "this is way too long";
-$s = $gvds->dot_escape($foo);
+$s = $gvds->_dot_escape($foo);
 is($s, "this ...");
 
 $foo="too\nlong\nand newlines";
-$s = $gvds->dot_escape($foo);
+$s = $gvds->_dot_escape($foo);
 is($s, "too ...");
