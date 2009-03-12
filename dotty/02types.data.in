@@ -1,9 +1,11 @@
 (name => 'coderef (anon)',
- code => '$a02 = sub { shift}; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
+ code => '$a02 = sub { shift}; 
+          GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'coderef (named)',
- code => '$a02 = \&get_current; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
+ code => '$a02 = \&get_current; 
+          GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'undef',
@@ -15,23 +17,28 @@
 )
 %%
 (name => 'scalar',
- code => '$a02 = 1; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
+ code => '$a02 = 1; 
+          GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'undef ref',
- code => '$a02 = undef; GraphViz::Data::Structure->new(\$a02,%title%)->graph->as_canon',
+ code => '$a02 = undef; 
+          GraphViz::Data::Structure->new(\$a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'glob',
- code => '$a02 = *Foo; GraphViz::Data::Structure->new(\$a02,%title%)->graph->as_canon',
+ code => '$a02 = *Foo; 
+          GraphViz::Data::Structure->new(\$a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'regexp-textual',
- code => '$a02 = qr/foo/; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
+ code => '$a02 = qr/foo/; 
+          GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'regexp-flagged',
- code => '$a02 = qr/foo/mixs; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
+ code => '$a02 = qr/foo/mixs; 
+          GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'empty array',

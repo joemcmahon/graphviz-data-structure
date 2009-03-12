@@ -3,25 +3,36 @@
 )
 %%
 (name=>'ref to scalar',
- code=>'$a03 = 1; GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
+ code=>'$a03 = 1; 
+        GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
 )
 %%
 (name=>'ref to ref to scalar',
- code=>'$a03 = 1; $b03 = \$a03; GraphViz::Data::Structure->new(\$b03,%title%)->graph->as_canon',
+ code=>'$a03 = 1; 
+        $b03 = \$a03; 
+        GraphViz::Data::Structure->new(\$b03,%title%)->graph->as_canon',
 )
 %%
 (name=>'ref to self',
- code=>'$a03 = \$a03; GraphViz::Data::Structure->new($a03,%title%)->graph->as_canon',
+ code=>'$a03 = \$a03; 
+        GraphViz::Data::Structure->new($a03,%title%)->graph->as_canon',
 )
 %%
 (name=>'ref to ref to self',
- code=>'$a03 = \$a03; $b03 = \$a03; GraphViz::Data::Structure->new(\$b03,%title%)->graph->as_canon',
+ code=>'$a03 = \$a03; 
+        $b03 = \$a03; 
+        GraphViz::Data::Structure->new(\$b03,%title%)->graph->as_canon',
 )
 %%
 (name=>'twin circular ref',
- code=>'$a03 = \$b03; $b03 = \$a03; GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
+ code=>'$a03 = \$b03; 
+        $b03 = \$a03; 
+        GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
 )
 %%
 (name=>'triple circular ref',
- code=>'$a03 = \$b03; $b03 = \$c03; $c03 = \$a03; GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
+ code=>'$a03 = \$b03; 
+        $b03 = \$c03; 
+        $c03 = \$a03; 
+        GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
 )

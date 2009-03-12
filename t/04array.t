@@ -33,11 +33,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="[]", rank=1, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="[]", rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_array0;
 }
@@ -52,11 +52,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="<port1>test", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>test", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_array0;
 }
@@ -71,11 +71,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_array0;
 }
@@ -90,11 +90,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_array0;
 }
@@ -108,11 +108,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array1 [label="[]", rank=1, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_array1 [label="[]", rank=1, shape=plaintext];
+		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_array1;
 }
@@ -127,13 +127,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_array1 [label="[]", rank=1, shape=plaintext];
 		gvds_array2 [label="[]", rank=1, shape=plaintext];
 		gvds_array3 [label="[]", rank=1, shape=plaintext];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_array1;
 	gvds_array0:port2 -> gvds_array2;
@@ -150,11 +150,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array1 [label="<port1>test", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_array1 [label="<port1>test", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_array1;
 }
@@ -169,13 +169,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_array1 [label="<port1>larry", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_array2 [label="<port1>moe", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_array3 [label="<port1>curly", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_array1;
 	gvds_array0:port2 -> gvds_array2;
@@ -192,11 +192,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array1 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_array1 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_array1;
 }
@@ -211,13 +211,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_array1 [label="{<port1>larry}|{<port2>moe}|{<port3>curly}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_array2 [label="{<port1>groucho}|{<port2>harpo}|{<port3>chico}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_array3 [label="{<port1>seagoon}|{<port2>bloodnok}|{<port3>eccles}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_array1;
 	gvds_array0:port2 -> gvds_array2;
@@ -234,11 +234,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_hash0 [label="{}", rank=1, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_hash0 [label="{}", rank=1, shape=plaintext];
+		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_hash0;
 }
@@ -253,13 +253,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_hash0 [label="{}", rank=1, shape=plaintext];
 		gvds_hash1 [label="{}", rank=1, shape=plaintext];
 		gvds_hash2 [label="{}", rank=1, shape=plaintext];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_hash0;
 	gvds_array0:port2 -> gvds_hash1;
@@ -276,11 +276,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>test|<port2>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_hash0 [label="{<port1>test|<port2>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_hash0;
 }
@@ -295,13 +295,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_hash0 [label="{<port1>larry|<port2>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash1 [label="{<port1>moe|<port2>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash2 [label="{<port1>curly|<port2>3}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_hash0;
 	gvds_array0:port2 -> gvds_hash1;
@@ -318,11 +318,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>curly|<port2>3}|{<port3>larry|<port4>2}|{<port5>moe|<port6>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_hash0 [label="{<port1>curly|<port2>3}|{<port3>larry|<port4>2}|{<port5>moe|<port6>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_array0 [label="<port1>.", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_hash0;
 }
@@ -337,13 +337,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_hash0 [label="{<port1>curly|<port2>3}|{<port3>larry|<port4>2}|{<port5>moe|<port6>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash1 [label="{<port1>chico|<port2>2}|{<port3>groucho|<port4>1}|{<port5>harpo|<port6>3}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash2 [label="{<port1>bloodnok|<port2>1}|{<port3>eccles|<port4>3}|{<port5>seagoon|<port6>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port1 -> gvds_hash0;
 	gvds_array0:port2 -> gvds_hash1;
@@ -360,13 +360,13 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>Nil}|{<port2>.}|{<port3>Nada}|{<port4>.}|{<port5>Zip}|{<port6>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_array1 [label="[]", rank=1, shape=plaintext];
 		gvds_array2 [label="[]", rank=1, shape=plaintext];
 		gvds_array3 [label="[]", rank=1, shape=plaintext];
+	}
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>Nil}|{<port2>.}|{<port3>Nada}|{<port4>.}|{<port5>Zip}|{<port6>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_array0:port2 -> gvds_array1;
 	gvds_array0:port4 -> gvds_array2;

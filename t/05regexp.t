@@ -47,11 +47,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/.*?foo\\[\\^2\\]\\\\d\\\\w/", rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label="qr/.*?foo\\[\\^2\\]\\\\d\\\\w/", rank=1, shape=plaintext];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }

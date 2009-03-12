@@ -1,5 +1,14 @@
 Change log
 
+revision 1.24
+date: 2004/09/21 18:58:59;  author: joe;  state: Exp;  lines: +15 -11
+- add() now understands array context
+- dummy node names are properly generated
+- undef warning from debug statement; removed altogether
+- fixed clobbering of to_port when recursing
+- cleaned up ellipses in dot_escape
+- make sure we take the right part of the string when trimming it in dot_escape
+
 revision 1.23
 date: 2004/08/13 18:30:12;  author: joe;  state: Exp;  lines: +21 -12
  - replace warn with debug() for testing

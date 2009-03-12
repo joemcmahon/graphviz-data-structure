@@ -16,7 +16,7 @@ sub debug(@) {
 }
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 # The currently-supported color palettes.
 our %palettes = (
@@ -465,7 +465,7 @@ sub add {
     my ($top, @port) = $self->init($data_structure, 0);
 
     # Done. Return GraphViz::Data::Structure object, top node, and port.
-    ($self, $top, @port);
+    wantarray ? ($self, $top, @port) : $self;
   }
 
   # Called as a class method. Just call new().
@@ -528,7 +528,7 @@ sub init {
   # If we've exceeded the depth limit, just return a plaintext "..." node.
   if (defined $self->{Depth} and $rank > $self->{Depth}) {
     debug("Dummy node\n");
-    my $node_type = sprintf("DUMMY(%08h)",$self->{Dummies}++);
+    my $node_type = sprintf("DUMMY(%08X)",0+$self->{Dummies}++);
     my $node_label = $node_type; 
     my $name = "gvds_dummy" . $self->{Dummies}++;
 
@@ -558,7 +558,6 @@ sub init {
     my @to_port = ();
     
     debug("Label: $node_label\n");
-    debug("Type $node_type\n") if defined $node_type;
 
     # Just a scalar, not a scalar ref. Generate a plaintext node.
     # Yes, this one *should* be node_label, not node_type.
@@ -627,11 +626,12 @@ sub init {
       # Sadly, this code does not yet work properly. Everything looks like a
       # scalar. Maybe later.
       my $subnode = $$root;
-      @to_port = blessed($subnode) ? ('to_port' => 0) : ();
-      my ($subnode_name,@to_port) = $self->init($subnode, $rank+1);
+      my $subnode_name;
+      my @next_to_port = blessed($subnode) ? ('to_port' => 0) : ();
+      ($subnode_name,@next_to_port) = $self->init($subnode, $rank+1);
       $self->{Graph}-> add_edge($name=>$subnode_name,
                                 @from_port,
-                                @to_port);
+                                @next_to_port);
       return ($name, @to_port);
     };
 
@@ -673,15 +673,16 @@ sub init {
       # Recording works, but the lookup to spot references to elements 
       # currently does not.
       my $port = 1;
+      my @next_to;
       foreach my $subnode (0..$#{$root}) {
          $self->{Addresses}->{address(\($root->[$subnode]))} = 
            [$name, ('to_port' => $port)];
          if (ref $root->[$subnode]) {
-           my ($subnode_name,@to_port) = 
+           my ($subnode_name,@next_to) = 
              $self->init($root->[$subnode], $rank+1, "link through");
            $self->{Graph}-> add_edge($name=> $subnode_name,
                                      'from_port'=>"$port", 
-                                     @to_port);
+                                     @next_to);
          }
          $port++;    # always go to next port, even if no edge added
       }
@@ -1316,12 +1317,15 @@ sub dot_escape {
   my ($self, $string) = @_;
   my ($first,$rest) = ($string,"");
   return "undef" unless defined $string;
+
   if (length($string) > $self->{Fuzz}) {
-    $string = substr($string,$self->{Fuzz}) . "...";
+    $string = substr($string,0,$self->{Fuzz}) . " ...";
     ($first,$rest) = split(/\n/,$string);
   }
+
   chomp $first;
   $first .= " ..." if $rest;
+
   # clean up characters significant to dot
   $first =~ s/([^?\-a-zA-Z0-9.=_(){}<>\/:* \n])/\\$1/g;
   debug("$first\n");

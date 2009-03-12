@@ -70,6 +70,10 @@ digraph test {
  code => 'my ($a,$b); $a = \\$b; bless $a, "Foo";$b = \\"bar";GraphViz::Data::Structure->new($a,graph=>{label=>"blessed scalar (ref value)"})->graph->as_canon',
  out  => qq([Scalar object]}|{<port1>.}}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
+	{
+		graph [rank=same];
+		gvds_atom0 [label=bar, rank=2, shape=plaintext];
+	}
 	gvds_scalar0:port1 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_atom0;
 }
@@ -77,10 +81,6 @@ digraph test {
 digraph test {
 	graph [label="blessed scalar (ref value)"];
 	node [label="\\N"];
-	{
-		graph [rank=same];
-		gvds_atom0 [label=bar, rank=2, shape=plaintext];
-	}
 	{
 		graph [rank=same];
 		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
@@ -220,6 +220,10 @@ digraph test {
  code => 'my ($a,$b); $a = \\$b; bless $a, "Foo";$b = \\"bar";GraphViz::Data::Structure->new($a,Orientation=>"vertical",graph=>{label=>"blessed vertical scalar (ref value)"})->graph->as_canon',
  out  => qq([Scalar object]}|{<port1>.}}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
+	{
+		graph [rank=same];
+		gvds_atom0 [label=bar, rank=2, shape=plaintext];
+	}
 	gvds_scalar0:port1 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_atom0;
 }
@@ -227,10 +231,6 @@ digraph test {
 digraph test {
 	graph [rankdir=LR, label="blessed vertical scalar (ref value)"];
 	node [label="\\N"];
-	{
-		graph [rank=same];
-		gvds_atom0 [label=bar, rank=2, shape=plaintext];
-	}
 	{
 		graph [rank=same];
 		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];

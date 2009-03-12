@@ -20,6 +20,15 @@ endure them):
 -------------------------------------------------------------------
 GraphViz::Data::Structure bugs (FIXED):
 
+version 0.09, sixth public release
+ - found and fixed a number of bugs while testing obscure features
+ - many new tests
+ - array-context calls now return proper results
+
+version 0.08, fifth public release
+ - fixed long-standing bug that caused all scalar refs to be interpreted
+   wrongly on 5.8.0 and up
+
 version 0.07, fourth public release
 - found bug in sharing scalar data between new() and add() calls
 - prettified array elements pointing to scalars (linkthru as per

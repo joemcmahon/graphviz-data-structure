@@ -33,11 +33,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label=1, rank=1, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_atom0 [label=1, rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }
@@ -52,11 +52,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label=1, rank=1, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_atom0 [label=1, rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }
@@ -71,15 +71,15 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_atom0 [label=1, rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
 		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_atom0;
@@ -110,11 +110,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_scalar1;
@@ -130,11 +130,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_scalar0;
@@ -150,15 +150,15 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-	}
-	{
-		graph [rank=same];
 		gvds_scalar2 [label="", color=white, fontcolor=black, rank=2, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
 		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_scalar2;

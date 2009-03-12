@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>4;
+use Test::More tests=>3;
 use GraphViz::Data::Structure;
 
 while (my $current = get_current()) {
@@ -23,120 +23,66 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
-(name => 'refs to scalars, new',
- code => '@a=(); foreach (qw(this is a test)){push @a,\\$_}; GraphViz::Data::Structure->new(\\@a,graph=>{label=>"refs to scalars, new"})->graph->as_canon',
+(name => 'ad subbing for new',
+ code => 'my ($a); $a=[1,2,4,8]; my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"ad subbing for new"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="refs to scalars, new"];
+	graph [label="ad subbing for new"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}|{<port4>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_atom0 [label=this, rank=1, shape=plaintext];
-		gvds_atom1 [label=is, rank=1, shape=plaintext];
-		gvds_atom2 [label=a, rank=1, shape=plaintext];
-		gvds_atom3 [label=test, rank=1, shape=plaintext];
+		gvds_array0 [label="{<port1>1}|{<port2>2}|{<port3>4}|{<port4>8}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
-	gvds_array0:port1 -> gvds_atom0;
-	gvds_array0:port2 -> gvds_atom1;
-	gvds_array0:port3 -> gvds_atom2;
-	gvds_array0:port4 -> gvds_atom3;
+	gvds_scalar0 -> gvds_array0;
 }
 
 )
 )
 %%
-(name => 'refs to scalars, add',
- code => '@a=(); foreach (qw(this is a test)){push @a,\\$_}; $gvds=GraphViz::Data::Structure->new(); $gvds->add(\\@a,graph=>{label=>"refs to scalars, add"}); $gvds->graph->as_canon',
+(name => 'add actually adding',
+ code => 'my ($a); $a=[1,2,4,8]; my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"add actually adding"}); my $b=[10,20,30]; my $w = $z->add($b)->graph->as_canon',
  out  => qq(digraph test {
+	graph [label="add actually adding"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label=undef, rank=0, shape=plaintext];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}|{<port4>.}", rank=0, shape=record, color=white, fontcolor=black, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array1 [label="{<port1>10}|{<port2>20}|{<port3>30}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_atom1 [label=this, rank=1, shape=plaintext];
-		gvds_atom2 [label=is, rank=1, shape=plaintext];
-		gvds_atom3 [label=a, rank=1, shape=plaintext];
-		gvds_atom4 [label=test, rank=1, shape=plaintext];
+		gvds_array0 [label="{<port1>1}|{<port2>2}|{<port3>4}|{<port4>8}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
-	gvds_array0:port1 -> gvds_atom1;
-	gvds_array0:port2 -> gvds_atom2;
-	gvds_array0:port3 -> gvds_atom3;
-	gvds_array0:port4 -> gvds_atom4;
+	gvds_scalar0 -> gvds_array0;
 }
 
 )
 )
 %%
-(name => 'refs to scalars, two arrays, new+add',
- code => '@a=(); foreach (qw(this is a test)){push @a,\\$_}; @b=(); foreach (sort @a) {push @b,$_}; $gvds=GraphViz::Data::Structure->new(\\@a,graph=>{label=>"refs to scalars, two arrays, new+add"});$gvds->add(\\@b); $gvds->graph->as_canon',
+(name => 'tie it together',
+ code => 'my ($a); $a=[1,2,4,8]; 
+         my $z = GraphViz::Data::Structure->new($a,graph=>{label=>"tie it together"}); 
+         my $b=[10,20,30]; 
+         $z->add($b); 
+         my $c=[$a,$b]; 
+         $z->add($c)->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="refs to scalars, two arrays, new+add"];
+	graph [label="tie it together"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}|{<port4>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
-		gvds_array1 [label="{<port1>.}|{<port2>.}|{<port3>.}|{<port4>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>1}|{<port2>2}|{<port3>4}|{<port4>8}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array1 [label="{<port1>10}|{<port2>20}|{<port3>30}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array2 [label="{<port1>.}|{<port2>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
-	{
-		graph [rank=same];
-		gvds_atom0 [label=this, rank=1, shape=plaintext];
-		gvds_atom1 [label=is, rank=1, shape=plaintext];
-		gvds_atom2 [label=a, rank=1, shape=plaintext];
-		gvds_atom3 [label=test, rank=1, shape=plaintext];
-	}
-	gvds_array0:port1 -> gvds_atom0;
-	gvds_array0:port2 -> gvds_atom1;
-	gvds_array0:port3 -> gvds_atom2;
-	gvds_array0:port4 -> gvds_atom3;
-	gvds_array1:port1 -> gvds_atom0;
-	gvds_array1:port2 -> gvds_atom1;
-	gvds_array1:port4 -> gvds_atom2;
-	gvds_array1:port3 -> gvds_atom3;
-}
-
-)
-)
-%%
-(name => 'refs to scalars, two arrays, add+add',
- code => '@a=(); foreach (qw(this is a test)){push @a,\\$_}; @b=(); foreach (sort @a) {push @b,$_}; $gvds=GraphViz::Data::Structure->new();$gvds->add(\\@a,graph=>{label=>"refs to scalars, two arrays, add+add"});$gvds->add(\\@b);$gvds->graph->as_canon',
- out  => qq(digraph test {
-	node [label="\\N"];
-	{
-		graph [rank=same];
-		gvds_atom0 [label=undef, rank=0, shape=plaintext];
-		gvds_array0 [label="{<port1>.}|{<port2>.}|{<port3>.}|{<port4>.}", rank=0, shape=record, color=white, fontcolor=black, style=filled];
-		gvds_array1 [label="{<port1>.}|{<port2>.}|{<port3>.}|{<port4>.}", rank=0, shape=record, color=white, fontcolor=black, style=filled];
-	}
-	{
-		graph [rank=same];
-		gvds_atom1 [label=this, rank=1, shape=plaintext];
-		gvds_atom2 [label=is, rank=1, shape=plaintext];
-		gvds_atom3 [label=a, rank=1, shape=plaintext];
-		gvds_atom4 [label=test, rank=1, shape=plaintext];
-	}
-	gvds_array0:port1 -> gvds_atom1;
-	gvds_array0:port2 -> gvds_atom2;
-	gvds_array0:port3 -> gvds_atom3;
-	gvds_array0:port4 -> gvds_atom4;
-	gvds_array1:port2 -> gvds_atom1;
-	gvds_array1:port1 -> gvds_atom2;
-	gvds_array1:port4 -> gvds_atom3;
-	gvds_array1:port3 -> gvds_atom4;
+	gvds_array2:port1 -> gvds_array0;
+	gvds_array2:port2 -> gvds_array1;
 }
 
 )
