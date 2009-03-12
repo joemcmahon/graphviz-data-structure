@@ -17,7 +17,7 @@ sub debug(@) {
 }
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 # The currently-supported color palettes.
 our %palettes = (

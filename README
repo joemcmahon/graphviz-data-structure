@@ -22,7 +22,3 @@ Building it
    If you want to install it in your own library, do
 
    perl Makefile.PL PREFIX=~
-
-Note: GraphViz 2.0 changed the way it was previously handling nodes with shape=record.
-      A patch to restore the old behavior has been passed along to Leon, but until
-      he cab get it in, GraphViz::Data::Structure handles doing the patch itself.

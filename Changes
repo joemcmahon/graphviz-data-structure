@@ -1,4 +1,9 @@
+
 Change log
+revision 1.26   locked by: joe;
+date: 2004/09/27 21:23:20;  author: joe;  state: Exp;  lines: +2 -110
+- removed patch; GraphViz 2.01 includes it
+- release 0.11
 
 revision 1.25
 date: 2004/09/24 16:22:57;  author: joe;  state: Exp;  lines: +110 -2
