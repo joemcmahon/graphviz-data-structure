@@ -1,0 +1,9 @@
+Version 0.04, first public release
+
+ - self-edges expose a bug in dot, causeing no graph to be output
+ - some hashes and arrays have a "shadow" on one edge, also a dot
+   bug
+ - "empty" cells have to be filled with a non-blank character, or
+   dot draws them as zero-width cells (dot bug)
+ - references to array and hash elements are not detected; they look
+   like plain of scalar references

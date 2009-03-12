@@ -1,0 +1,110 @@
+Change log
+
+revision 1.16
+date: 2002/01/23 23:28:57;  author: joe;  state: Exp;  lines: +7 -8
+ - final minor pod fixes
+
+revision 1.15
+date: 2002/01/23 23:01:27;  author: joe;  state: Exp;  lines: +136 -79
+ - added and clarified docs
+ - fixed up color processing a little
+ - first actually-release (version 0.04)
+
+revision 1.14
+date: 2002/01/18 22:33:33;  author: joe;  state: Exp;  lines: +32 -18
+ - version to 0.04
+ - added font coloring to color support
+ - fixed bad colors in base palettes
+
+revision 1.13
+date: 2002/01/18 22:02:30;  author: joe;  state: Exp;  lines: +242 -55
+ - new version 0.03
+ - remove use vars
+ - Debug doc
+ - color support
+ - was_null()
+ - dot in empty boxes
+ - doc of dot bugs
+
+revision 1.12
+date: 2002/01/15 20:32:02;  author: joe;  state: Exp;  lines: +137 -113
+ - version to 0.02
+ - passing of "not-understood" to GraphViz
+ - Remove Freeform, since it didn't work
+ - added address cache for (future) array/hash detection
+ - fixed add to call new if no object existed
+ - eliminated common - less clear with it than not
+ - cleaned up whitespace all over
+ - added more comments
+ - added element address cacheing
+ - added address()
+ - misc doc cleanup
+
+revision 1.11
+date: 2001/12/26 23:09:55;  author: joe;  state: Exp;  lines: +1 -2
+ - added newline to non-escaped characters for dot_escape
+ - first working version to pass tests (0.01)
+
+revision 1.10
+date: 2001/12/24 20:14:01;  author: joe;  state: Exp;  lines: +93 -83
+ - got glob code working
+ - changed "empty" test to make it simpler to integrate globs
+ - despecialized hash port code to simplfy it (and make it work!)
+ - recommented some places for greater clarity
+ - made Devel::Peek a requirement
+
+revision 1.9
+date: 2001/12/20 21:09:41;  author: joe;  state: Exp;  lines: +333 -148
+ - major documentation upgrades
+ - added first cut a glob support
+ - regexp support
+ - code reference support
+ - removed =internal-doc stuff; show it all
+
+revision 1.8
+date: 2001/12/19 17:19:00;  author: joe;  state: Exp;  lines: +44 -1
+ - turned debug back off by default
+ - added comments describing the goals of the visualization
+ - expanded algorithm overview
+ - added regexp dumping
+
+revision 1.7
+date: 2001/11/30 23:09:19;  author: joe;  state: Exp;  lines: +107 -102
+ - fixed vertical hash ports (really!)
+ - fixed link-thru from hashes (need to test arrays)
+
+revision 1.6
+date: 2001/11/19 22:01:21;  author: joe;  state: Exp;  lines: +18 -18
+ - added rankdir support
+ - fixed defined bug
+ - added newlines to object labels
+ - fixed 1-element hashes
+ - fixed multi-element vertical hashes
+
+revision 1.5
+date: 2001/11/15 19:45:05;  author: joe;  state: Exp;  lines: +53 -52
+ - fixed undef warnings
+ - fixed hash object bug
+ - got scalar objects working properly
+ - fixed up link labels for scalar objects
+
+revision 1.4
+date: 2001/10/29 20:06:19;  author: joe;  state: Exp;  lines: +4 -4
+ - removed extra port in single-element hashes
+
+revision 1.3
+date: 2001/10/29 19:12:28;  author: joe;  state: Exp;  lines: +43 -4
+ - changed _array_shape to _aggregate_shape (used for both arrays and hashes)
+ - fixed bug in vertical array layout
+ - fixed layout for blessed empty hashes and arrays
+ - fixed layout for single-element unblessed hashes.
+
+revision 1.2
+date: 2001/10/26 19:50:20;  author: joe;  state: Exp;  lines: +73 -35
+ - fixed empty arrays to come out properly (for blessed arrays)
+
+revision 1.1
+date: 2001/10/26 19:02:58;  author: joe;  state: Exp;
+ - original version; created by ExtUtils::ModuleMaker 0.20102
+ - basic code cadged from GraphViz examples
+
