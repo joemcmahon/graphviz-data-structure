@@ -253,13 +253,13 @@ __DATA__
 )
 %%
 (name => 'three-element hash, horizontal',
- code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>scalar(localtime(0)),Gamma=>1},graph=>{label=>"three-element hash, horizontal"})->graph->as_canon',
+ code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>"a longer string",Gamma=>1},graph=>{label=>"three-element hash, horizontal"})->graph->as_canon',
  out  => qq(digraph test {
 	graph [label="three-element hash, horizontal"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_hash0 [label="{<port1>Alpha|<port2>sample}|{<port3>Beta|<port4>Wed Dec 31 19:00:00 1969}|{<port5>Gamma|<port6>1}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>Alpha|<port2>sample}|{<port3>Beta|<port4>a longer string}|{<port5>Gamma|<port6>1}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 }
 
@@ -267,13 +267,13 @@ __DATA__
 )
 %%
 (name => 'three-element hash, vertical',
- code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>scalar(localtime(0)),Gamma=>1},Orientation=>"vertical",graph=>{label=>"three-element hash, vertical"})->graph->as_canon',
+ code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>"a longer string",Gamma=>1},Orientation=>"vertical",graph=>{label=>"three-element hash, vertical"})->graph->as_canon',
  out  => qq(digraph test {
 	graph [rankdir=LR, label="three-element hash, vertical"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_hash0 [label="{{<port1>Alpha|<port3>Beta|<port5>Gamma}|{<port2>sample|<port4>Wed Dec 31 19:00:00 1969|<port6>1}}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_hash0 [label="{{<port1>Alpha|<port3>Beta|<port5>Gamma}|{<port2>sample|<port4>a longer string|<port6>1}}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 }
 

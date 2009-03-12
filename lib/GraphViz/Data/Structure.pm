@@ -9,7 +9,7 @@ use Devel::Peek;
 our $Debug = 0;
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 # The currently-supported color palettes.
 our %palettes = (

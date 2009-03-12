@@ -1,8 +1,14 @@
 Change log
 
+revision 1.17
+date: 2002/04/15 14:45:04;  author: joe;  state: Exp;  lines 0
+ - fix 02types.data.in to not use localtime to generate test data 
+ - release version 0.06
+
 revision 1.16
 date: 2002/01/23 23:28:57;  author: joe;  state: Exp;  lines: +7 -8
  - final minor pod fixes
+ - release version 0.05
 
 revision 1.15
 date: 2002/01/23 23:01:27;  author: joe;  state: Exp;  lines: +136 -79

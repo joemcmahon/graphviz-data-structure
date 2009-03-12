@@ -1,3 +1,7 @@
+version 0.05, second public release
+ - 02types.t used localtime to generate a static test string. Changed
+   to a really static string.
+
 Version 0.04, first public release
 
  - self-edges expose a bug in dot, causeing no graph to be output

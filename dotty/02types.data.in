@@ -59,9 +59,9 @@
 )
 %%
 (name => 'three-element hash, horizontal',
- code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>scalar(localtime(0)),Gamma=>1},%title%)->graph->as_canon',
+ code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>"a longer string",Gamma=>1},%title%)->graph->as_canon',
 )
 %%
 (name => 'three-element hash, vertical',
- code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>scalar(localtime(0)),Gamma=>1},Orientation=>"vertical",%title%)->graph->as_canon',
+ code => 'GraphViz::Data::Structure->new({Alpha=>"sample",Beta=>"a longer string",Gamma=>1},Orientation=>"vertical",%title%)->graph->as_canon',
 )
