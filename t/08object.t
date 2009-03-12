@@ -28,7 +28,7 @@ sub normalize {  }
 __DATA__
 (name => 'blessed scalar (empty)',
  code => 'my ($a,$b); 
-        $a = \\$b; bless $a, "Foo"; 
+        $a = \\do{my $scalar}; bless $a, "Foo"; 
         GraphViz::Data::Structure->new($a,graph=>{label=>"blessed scalar (empty)"})->graph->as_canon',
  out  => qq([Scalar object]}|{<port1>.}}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}

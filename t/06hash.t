@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>16;
+use Test::More tests=>17;
 use GraphViz::Data::Structure;
 
 while (my $current = get_current()) {
@@ -365,6 +365,32 @@ __DATA__
 		gvds_hash1 [label="{<port1>bloodnok|<port2>2}|{<port3>eccles|<port4>3}|{<port5>seagoon|<port6>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash2 [label="{<port1>chico|<port2>3}|{<port3>groucho|<port4>1}|{<port5>harpo|<port6>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash3 [label="{<port1>curly|<port2>3}|{<port3>larry|<port4>1}|{<port5>moe|<port6>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+	}
+	gvds_hash0:port2 -> gvds_hash1;
+	gvds_hash0:port4 -> gvds_hash2;
+	gvds_hash0:port6 -> gvds_hash3;
+}
+
+)
+)
+%%
+(name => 'odd characters in parent',
+ code => 'my %a=("<html>"=>{"larry"=>1,"moe"=>2,"curly"=>3},
+               "<script>"=>{"groucho"=>1,"harpo"=>2,"chico"=>3},
+               "<body>"=>{"seagoon"=>1,"bloodnok"=>2,"eccles"=>3}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"odd characters in parent"})->graph->as_canon',
+ out  => qq(digraph test {
+	graph [ratio=fill, label="odd characters in parent"];
+	node [label="\\N"];
+	{
+		graph [rank=same];
+		gvds_hash0 [label="{<port1>\\<body\\>|<port2>.}|{<port3>\\<html\\>|<port4>.}|{<port5>\\<script\\>|<port6>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_hash1 [label="{<port1>bloodnok|<port2>2}|{<port3>eccles|<port4>3}|{<port5>seagoon|<port6>1}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_hash2 [label="{<port1>curly|<port2>3}|{<port3>larry|<port4>1}|{<port5>moe|<port6>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_hash3 [label="{<port1>chico|<port2>3}|{<port3>groucho|<port4>1}|{<port5>harpo|<port6>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	gvds_hash0:port2 -> gvds_hash1;
 	gvds_hash0:port4 -> gvds_hash2;

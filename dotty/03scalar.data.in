@@ -36,3 +36,8 @@
         $c03 = \$a03; 
         GraphViz::Data::Structure->new(\$a03,%title%)->graph->as_canon',
 )
+%%
+(name=>'odd characters',
+ code=>'$z="<html><head> ...";
+        GraphViz::Data::Structure->new(\$z,%title%)->graph->as_canon',
+)

@@ -82,3 +82,8 @@
  code=>'my @a=(Nil=>[],Nada=>[],Zip=>[]); 
         GraphViz::Data::Structure->new(\@a,%title%)->graph->as_canon',
 )
+%%
+(name=>'odd characters',
+ code=>'my @a=("<html>"=>[],"<script>"=>[],"<body>"=>[]); 
+        GraphViz::Data::Structure->new(\@a,%title%)->graph->as_canon',
+)

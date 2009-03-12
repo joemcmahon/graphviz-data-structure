@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>17;
+use Test::More tests=>18;
 use GraphViz::Data::Structure;
 
 while (my $current = get_current()) {
@@ -379,6 +379,30 @@ __DATA__
 	{
 		graph [rank=same];
 		gvds_array0 [label="{<port1>Nil}|{<port2>.}|{<port3>Nada}|{<port4>.}|{<port5>Zip}|{<port6>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_array1 [label="\\[\\]", rank=1, shape=plaintext];
+		gvds_array2 [label="\\[\\]", rank=1, shape=plaintext];
+		gvds_array3 [label="\\[\\]", rank=1, shape=plaintext];
+	}
+	gvds_array0:port2 -> gvds_array1;
+	gvds_array0:port4 -> gvds_array2;
+	gvds_array0:port6 -> gvds_array3;
+}
+
+)
+)
+%%
+(name => 'odd characters',
+ code => 'my @a=("<html>"=>[],"<script>"=>[],"<body>"=>[]); 
+        GraphViz::Data::Structure->new(\\@a,graph=>{label=>"odd characters"})->graph->as_canon',
+ out  => qq(digraph test {
+	graph [ratio=fill, label="odd characters"];
+	node [label="\\N"];
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>\\<html\\>}|{<port2>.}|{<port3>\\<script\\>}|{<port4>.}|{<port5>\\<body\\>}|{<port6>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];

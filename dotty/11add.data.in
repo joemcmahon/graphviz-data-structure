@@ -1,4 +1,4 @@
-(name => 'ad subbing for new',
+(name => 'add subbing for new',
  code => 'my ($a); 
           $a=[1,2,4,8]; 
           my $z = GraphViz::Data::Structure->new(\$a,%title%)->graph->as_canon',

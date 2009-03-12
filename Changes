@@ -1,5 +1,9 @@
 Change log
 
+0.15  Mon Nov 28 12:20:03 2005
+	- Allow <> in labels
+        - Fix problem that sometimes led to array object having no label
+
 0.14  Mon Sep 26 12:40:51 2005
 	- added pod tests to MANIFEST so they would get distributed (oops)
 	- added TODO in basic.t (dot bug fixed in some versions of dot)

@@ -81,3 +81,10 @@
                Goons=>{"seagoon"=>1,"bloodnok"=>2,"eccles"=>3}); 
         GraphViz::Data::Structure->new(\%a,%title%)->graph->as_canon',
 )
+%%
+(name=>'odd characters in parent',
+ code=>'my %a=("<html>"=>{"larry"=>1,"moe"=>2,"curly"=>3},
+               "<script>"=>{"groucho"=>1,"harpo"=>2,"chico"=>3},
+               "<body>"=>{"seagoon"=>1,"bloodnok"=>2,"eccles"=>3}); 
+        GraphViz::Data::Structure->new(\%a,%title%)->graph->as_canon',
+)

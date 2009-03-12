@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>7;
+use Test::More tests=>8;
 use GraphViz::Data::Structure;
 
 while (my $current = get_current()) {
@@ -174,6 +174,26 @@ __DATA__
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_scalar2;
 	gvds_scalar2 -> gvds_scalar0;
+}
+
+)
+)
+%%
+(name => 'odd characters',
+ code => '$z="<html><head> ...";
+        GraphViz::Data::Structure->new(\\$z,graph=>{label=>"odd characters"})->graph->as_canon',
+ out  => qq(digraph test {
+	graph [ratio=fill, label="odd characters"];
+	node [label="\\N"];
+	{
+		graph [rank=same];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+	}
+	{
+		graph [rank=same];
+		gvds_atom0 [label="\\\\<html\\\\>\\\\<head\\\\> ...", rank=1, shape=plaintext];
+	}
+	gvds_scalar0 -> gvds_atom0;
 }
 
 )

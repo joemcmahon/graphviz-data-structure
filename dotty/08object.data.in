@@ -1,6 +1,6 @@
 (name=>'blessed scalar (empty)',
  code=>'my ($a,$b); 
-        $a = \\$b; bless $a, "Foo"; 
+        $a = \do{my $scalar}; bless $a, "Foo"; 
         GraphViz::Data::Structure->new($a,%title%)->graph->as_canon',
 )
 %%

@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>23;
+use Test::More tests=>25;
 
 use GraphViz::Data::Structure;
 ok(GraphViz::Data::Structure->can('new'), 'new() works');
@@ -42,3 +42,7 @@ is($gvds->{Fuzz}, 40,                        "standard fuzz");
 is($gvds->{Depth}, undef,                    "standard depth");
 is($gvds->{Label}, 'left',                   "standard label");
 is($gvds->{Orientation},'vertical',          "custom orientation");
+
+$gvds = GraphViz::Data::Structure->add(1);
+ok(defined $gvds,                            "add() returns something");
+isa_ok($gvds, 'GraphViz::Data::Structure',   "proper object");

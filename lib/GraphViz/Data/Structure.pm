@@ -6,6 +6,7 @@ use lib '..';
 
 use GraphViz 2.01;
 use Devel::Peek;
+use Scalar::Util qw(refaddr reftype blessed);
 
 our $Debug = 0;
 
@@ -17,7 +18,7 @@ sub _debug(@) {
 }
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 # The currently-supported color palettes.
 our %palettes = (
@@ -107,7 +108,9 @@ ourselves recursively to determine how all nodes below this one
 should be visualized.Edges are added after the subnodes are added to the graph.
 
 Items "within" the current subnode (array and hash elements which are
-I<not> references) are rendered inside a cell in the aggregate corresponding to their position. References are represented by an edge linking the appropriate postion in the aggregate to the appropriate subnode.
+I<not> references) are rendered inside a cell in the aggregate corresponding to 
+their position. References are represented by an edge linking the appropriate 
+postion in the aggregate to the appropriate subnode.
 
 This code does its data-structure unwrapping in a manner very similar to 
 that used by C<dumpvar.pl>, the code used by the debugger to display data 
@@ -544,18 +547,18 @@ sub init {
 
   # Find the address of the incoming item. If it's already a reference,
   # stringifying it will get the address.If not, make a reference to it.
-  # Special case for regexps: the have a ref of 'Regexp', but if stringified
+  # Special case for regexps: they have a ref of 'Regexp', but if stringified
   # they return the regexp. Get a reference to them too.
   my $ref = (ref($root) eq 'Regexp' or !ref($root)) ? \$root : $root;
 
   # If this item is already in the addresses cache, we've visualized it
   # already. Find the node and port information and just return that.
-  my $hookup_info = $self->{Addresses}->{address($ref)};
+  my $hookup_info = $self->{Addresses}->{refaddr($ref)};
   return @$hookup_info if defined $hookup_info;
 
   # Figure out what the node is. Just ref() won't do, as it doesn't tell you
   # what the referent is if it's an object.
-  foreach my $node_type (defined $root ? $root."" : $root) {
+  foreach my $node_type (reftype($root)) {
     my $node_label = ref $root;
     my @to_port = ();
     
@@ -582,6 +585,7 @@ sub init {
     # Regexp. Generate a node for this containing the regexp text and return. 
     # Regexps are always leaf nodes. Again, this should be node_label.
     $node_label =~ /^Regexp$/ and do {
+      $node_type = "$root";
       my($flagson, undef, $flagsoff, $regexp) = 
         ($node_type =~ /^\(\?(.*?)(-(.*?))*?:(.*)\)$/);
       print "Regex $node_type parsed as: $regexp (+$flagson, -$flagsoff)\n" if $Debug;
@@ -591,7 +595,7 @@ sub init {
                                 @rank,
                                 shape=>"plaintext");
       $self->{NodeCache}->{name}            = [$name, ()];
-      $self->{Addresses}->{address(\$root)} = [$name, ()];
+      $self->{Addresses}->{refaddr(\$root)} = [$name, ()];
       return ($name,());   # no to-port for plaintext
     };
 
@@ -609,7 +613,7 @@ sub init {
 
       # Add the node for the scalar itself.
       $self->{Graph}->add_node($name,
-                               label=>$self->_scalar_port($node_type, $root),
+                               label=>$self->_scalar_port($root),
                                'shape' => 'record',
                                'color' => $self->{Colors}->{Scalar},
                                'style' => 'filled',
@@ -618,7 +622,7 @@ sub init {
       @to_port = blessed($root) ? ('to_port' => 0) : ();
       my @from_port = blessed($root) ? ('from_port' => 1) : ();
       $self->{NodeCache}->{$node_type}     = [$name, @to_port];
-      $self->{Addresses}->{address($root)} = [$name, @to_port];
+      $self->{Addresses}->{refaddr($root)} = [$name, @to_port];
  
       # Visualize nodes under this one. If the item pointed to is an element of
       # an aggregate (hash or array), visualize the whole aggregate and then
@@ -647,14 +651,14 @@ sub init {
       if (@$root == 0 && !blessed($root)) {
         # Empty unblessed array.
         $self->{Graph}->add_node($name, 
-                                 label=>$self->_array_ports($node_type,$root),
+                                 label=>$self->_array_ports($root),
                                  @rank,
                                  shape=> 'plaintext');
       }
       else {
         # Blessed and/or non-empty.
         $self->{Graph}->add_node($name, 
-                                 label=>$self->_array_ports($node_type,$root),
+                                 label=>$self->_array_ports($root),
                                  @rank,
                                  shape=> 'record',
                                  'color' => $self->{Colors}->{Array},
@@ -664,7 +668,7 @@ sub init {
       }
       my @to_port = blessed($root) ? ('to_port' => 0) : ();
       $self->{NodeCache}->{$node_type}     = [$name, @to_port];
-      $self->{Addresses}->{address($root)} = [$name, @to_port];
+      $self->{Addresses}->{refaddr($root)} = [$name, @to_port];
 
       # For each entry in the array that's a reference, crawl down
       # and link the subtree back in to the current port. Non-reference
@@ -677,7 +681,7 @@ sub init {
       my $port = 1;
       my @next_to;
       foreach my $subnode (0..$#{$root}) {
-         $self->{Addresses}->{address(\($root->[$subnode]))} = 
+         $self->{Addresses}->{refaddr(\($root->[$subnode]))} = 
            [$name, ('to_port' => $port)];
          if (ref $root->[$subnode]) {
            my ($subnode_name,@next_to) = 
@@ -719,7 +723,7 @@ sub init {
       }
       my @to_port = blessed($root) ? ('to_port' => 0) : ();
       $self->{NodeCache}->{$node_type}     = [$name, @to_port];
-      $self->{Addresses}->{address($root)} = [$name, @to_port];
+      $self->{Addresses}->{refaddr($root)} = [$name, @to_port];
 
       my $port = 2;
 
@@ -730,7 +734,7 @@ sub init {
         # We go by twos because the keys have the odd ports and the values
         # the even ones; we want links to come from the values.
         if (ref $root->{$subnode}) {
-          $self->{Addresses}->{address(\($root->{$subnode}))} = 
+          $self->{Addresses}->{refaddr(\($root->{$subnode}))} = 
             [$name, ('to_port' => $port)];
           my ($subnode_name,@to_port) = $self->init($root->{$subnode},
                                               $rank+1,"link through");
@@ -753,7 +757,7 @@ sub init {
                                @rank,
                                shape=>"plaintext");
       $self->{NodeCache}->{$name}          = [$name, ()];  
-      $self->{Addresses}->{address($root)} = [$name, ()];
+      $self->{Addresses}->{refaddr($root)} = [$name, ()];
       return ($name,());   # no to-port for plaintext
     };
 
@@ -774,7 +778,7 @@ sub init {
                                   );
 	my @to_port = ('to_port' => 0);  # the fake hash is always blessed
 	$self->{NodeCache}->{$name}               = [$name, @to_port];	
-        $self->{Addresses}->{address($fake_glob)} = [$name, @to_port];
+        $self->{Addresses}->{refaddr($fake_glob)} = [$name, @to_port];
 
 	# Now take the "glob" apart.
 	my $port = 2;
@@ -785,7 +789,7 @@ sub init {
 	  # We go by twos because the keys have the odd ports and the values
 	  # the even ones; we want links to come from the values.
 	  if (ref $fake_glob->{$subnode}) {
-            $self->{Addresses}->{address(\($fake_glob->{$subnode}))} = 
+            $self->{Addresses}->{refaddr(\($fake_glob->{$subnode}))} = 
               [$name, ('to_port' => $port)];
 	    my ($subnode_name,@to_port) = $self->init($fake_glob->{$subnode},
                                                       $rank+1, "link through");
@@ -804,52 +808,11 @@ sub init {
                                  @rank,
                                  shape=>"plaintext");
         $self->{NodeCache}->{$name}          = [$name, ()];
-        $self->{Addresses}->{address($root)} = [$name, ()];
+        $self->{Addresses}->{refaddr($root)} = [$name, ()];
         return ($name, ());   # no to-port for plaintext
       }
     };
   }
-}
-
-=begin internals
-
-=head2 C<blessed()>
-
-The C<blessed> utility routine returns the string corresponding to the class 
-into which the incoming reference is blessed, or undef if it is not blessed.
-
-=end internals
-
-=cut 
-
-sub blessed {
-  my ($ref) = @_;
-  if (defined $ref) {
-    $ref =~ /(.*)=(.*)(\(.*\))/;
-    $1;
-  }
-  else {
-    undef;
-  }
-}
-
-=begin internals 
-
-=head2 C<address()>
-
-The C<address> utility routine returns the address associated with the 
-reference passed in. This is used to find common items in the address
-cache.
-
-=end internals
-
-=cut 
-
-sub address {
-    my $ref = shift;
-    return $ref unless ref $ref;
-    $ref =~ /(0x[0-9a-f]+)/;
-    $1;
 }
 
 =head1 DOT INPUT - LAYOUT DETAILS
@@ -896,11 +859,11 @@ class name on top, tagged appropriately, and the value on the bottom.
 =cut
 
 sub _scalar_port {
-  my ($self, $label, $scalar) = @_;
+  my ($self, $scalar) = @_;
   my $out;
-  if (defined (my $here = blessed($label))) {
+  if (defined (my $here = blessed($scalar))) {
      # Blessed scalar. Add name.
-     $out = "{{<port0>$here\n[Scalar object]}|{<port1>" .
+     $out = "{{<port0>$here\\n[Scalar object]}|{<port1>" .
               (ref $scalar ? "." : $self->_dot_escape($scalar)) ."}}";
   }
   else {
@@ -964,20 +927,20 @@ it's empty explicitly.
 =cut
 
 sub _array_ports {
-  my ($self, $label, $array) = @_;
+  my ($self, $arrayref) = @_;
   local $_;
   my @ports = ();
   my $port = 1;
-  my $label_needed = blessed($label);
+  my $label_needed = blessed($arrayref);
 
   # Deal with the empty cases first. If the array is completely empty
   # and is not blessed, we just want to show a plaintext "[]". If it's
   # blessed, we want to show a record which shows that it's a blessed
   # array, but empty.
-  if (@$array == 0) {
+  if (@$arrayref == 0) {
     if ($label_needed) {
       # Empty, but blessed.
-      return "{<port0>$label_needed\n[Array object]|{(empty)}}";
+      return "{<port0>$label_needed\\n[Array object]|{(empty)}}";
     }
     else {
       # Empty, and not blessed.
@@ -986,9 +949,9 @@ sub _array_ports {
   }
 
   # Another exception: single-element arrays.
-  if (@$array == 1) {
+  if (@$arrayref == 1) {
     my $cleanvalue;
-    my $v = $array->[0];
+    my $v = $arrayref->[0];
     if (ref $v) {
       $cleanvalue = "<port1>.";
     }
@@ -1000,7 +963,7 @@ sub _array_ports {
       $basic = "$cleanvalue";
     }
     else {
-      $basic = "{<port0>$label_needed\n[Array object]|$cleanvalue}";
+      $basic = "{<port0>$label_needed\\n[Array object]|$cleanvalue}";
     }
     return $basic;
   }
@@ -1012,7 +975,7 @@ sub _array_ports {
   # Case 4: blessed array. 
   $case = 4 if $label_needed;
 
-  foreach (@$array) {
+  foreach (@$arrayref) {
     ref $_ ? (push @ports, "{<port$port>.}") 
            :  push @ports, "{<port$port>" . $self->_dot_escape($_) . "}";
     $port++;
@@ -1030,7 +993,7 @@ sub _array_ports {
     # Case 4: blessed array, laid out horizontally. 
     #   $hports = "{<port0>Foo|{{<port1>1}|{<port2>}|{<port2>s}}}";
     /4/ and do {
-      $array_ports = "{<port0>$label_needed\n[Array object]|{" . (join "|", @ports) . "}}";
+      $array_ports = "{<port0>$label_needed\\n[Array object]|{" . (join "|", @ports) . "}}";
     }
   }
   _debug("$array_ports\n");
@@ -1112,14 +1075,16 @@ anymore.  It just works and looks nice.
 =head2 GLOBS
 
 Globs, from the layout point of view, look pretty much like blessed hashes.
-The only exception for globs is if there's nothing in the glob, we want to display it just as a plaintext node.
+The only exception for globs is if there's nothing in the glob, we want to 
+display it just as a plaintext node.
 
 =cut
 
 =for internals
 
 In the interest of coding as little as possible, we just reuse the hash code. 
-We construct a tiny pair of wrapper methods which add the necessary information to the parameter list and then call the common module.
+We construct a tiny pair of wrapper methods which add the necessary information 
+to the parameter list and then call the common module.
 
 =cut
 
@@ -1146,7 +1111,7 @@ sub _hash_or_glob_ports {
   # We'll just pull out the string that differentiates them and
   # set it appropriately right here. Leter on, the code can be
   # identical, with the decision already out of the way.
-  my $description = {Hash=>"\n[Hash object]", Glob=>""}->{$type};
+  my $description = {Hash=>"\\n[Hash object]", Glob=>""}->{$type};
 
   # Exception: empty hashes. If the hash is completely empty and is not
   # blessed, we just want to show a plaintext "{}". If it's blessed, we
@@ -1328,7 +1293,7 @@ sub _dot_escape {
   $first .= " ..." if $rest;
 
   # clean up characters significant to dot
-  $first =~ s/([^?\-a-zA-Z0-9.=_(){}<>\/:* \n])/\\$1/g;
+  $first =~ s/([^?\-a-zA-Z0-9.=_(){}\/:* \n])/\\$1/g;
   _debug("$first\n");
   $first;
 }
@@ -1459,7 +1424,8 @@ call the C<was_null()> method for now, which will tell you the graph was
 null and let you decide what to do.
 
 It isn't possible (in current releases of C<dot>) to code a record label which 
-contains no text (e.g.: C<{E<lt>port1E<gt>}>); this generates a zero-width box. This has been worked around by placing a single period in places where nothing 
+contains no text (e.g.: C<{E<lt>port1E<gt>}>); this generates a zero-width box. 
+This has been worked around by placing a single period in places where nothing 
 at all would have been preferable. The C<graphviz> developers have developed a
 patch for C<dot> that corrects the problem, but it is not yet in a released 
 version, though it is in CVS.

@@ -26,7 +26,7 @@ sub get_current {
 sub normalize {  }
 
 __DATA__
-(name => 'ad subbing for new',
+(name => 'add subbing for new',
  code => 'my ($a); 
           $a=[1,2,4,8]; 
           my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"ad subbing for new"})->graph->as_canon',
