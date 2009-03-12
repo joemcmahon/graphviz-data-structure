@@ -1,5 +1,9 @@
 Change log
 
+0.16  Wed Jul 11 13:45:26 PDT 2007
+	- fix bug that would not allow install with versions of 
+	  graphviz > 2.9: patch from David Romano (unobe@cpan.org)
+
 0.15  Mon Nov 28 12:20:03 2005
 	- Allow <> in labels
         - Fix problem that sometimes led to array object having no label
