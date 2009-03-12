@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>17;
+use Test::More tests=>18;
 use GraphViz::Data::Structure;
 
 while (my $current = get_current()) {
@@ -23,13 +23,7 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
 (name => 'coderef (anon)',
@@ -136,19 +130,28 @@ __DATA__
 )
 %%
 (name => 'regexp-textual',
- code => '$a02 = qr/foo/; GraphViz::Data::Structure->new(\\$a02,graph=>{label=>"regexp-textual"})->graph->as_canon',
+ code => '$a02 = qr/foo/; GraphViz::Data::Structure->new($a02,graph=>{label=>"regexp-textual"})->graph->as_canon',
  out  => qq(digraph test {
 	graph [label="regexp-textual"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label="qr/foo/", rank=0, shape=plaintext];
 	}
+}
+
+)
+)
+%%
+(name => 'regexp-flagged',
+ code => '$a02 = qr/foo/mixs; GraphViz::Data::Structure->new($a02,graph=>{label=>"regexp-flagged"})->graph->as_canon',
+ out  => qq(digraph test {
+	graph [label="regexp-flagged"];
+	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/(?-xism:foo)/", rank=1, shape=plaintext];
+		gvds_atom0 [label="qr/foo/msix", rank=0, shape=plaintext];
 	}
-	gvds_scalar0 -> gvds_atom0;
 }
 
 )

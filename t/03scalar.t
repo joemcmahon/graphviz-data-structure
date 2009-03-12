@@ -23,13 +23,7 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
 (name => 'ref to atom',
@@ -81,11 +75,11 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_atom0 [label=1, rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_atom0 [label=1, rank=2, shape=plaintext];
+		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_atom0;
@@ -160,11 +154,11 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar2 [label="", color=white, fontcolor=black, rank=2, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_scalar2 [label="", color=white, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_scalar1 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_scalar1;
 	gvds_scalar1 -> gvds_scalar2;

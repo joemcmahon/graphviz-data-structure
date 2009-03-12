@@ -23,13 +23,7 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
 (name => 'array ref to self',

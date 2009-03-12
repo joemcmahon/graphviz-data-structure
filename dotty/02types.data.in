@@ -27,7 +27,11 @@
 )
 %%
 (name => 'regexp-textual',
- code => '$a02 = qr/foo/; GraphViz::Data::Structure->new(\$a02,%title%)->graph->as_canon',
+ code => '$a02 = qr/foo/; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
+)
+%%
+(name => 'regexp-flagged',
+ code => '$a02 = qr/foo/mixs; GraphViz::Data::Structure->new($a02,%title%)->graph->as_canon',
 )
 %%
 (name => 'empty array',

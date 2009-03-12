@@ -23,13 +23,7 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
 (name => 'regexp-textual',
@@ -39,7 +33,7 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/(?-xism:foo)/", rank=0, shape=plaintext];
+		gvds_atom0 [label="qr/foo/", rank=0, shape=plaintext];
 	}
 }
 
@@ -47,17 +41,17 @@ __DATA__
 )
 %%
 (name => 'regexp-ref',
- code => 'my $a = qr/foo/; GraphViz::Data::Structure->new(\\$a,graph=>{label=>"regexp-ref"})->graph->as_canon',
+ code => 'my $a = qr/.*?foo[^2]\\d\\w/; GraphViz::Data::Structure->new(\\$a,graph=>{label=>"regexp-ref"})->graph->as_canon',
  out  => qq(digraph test {
 	graph [label="regexp-ref"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label="qr/.*?foo\\[\\^2\\]\\\\d\\\\w/", rank=1, shape=plaintext];
 	}
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/(?-xism:foo)/", rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }
@@ -72,7 +66,7 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/(?ix-sm:foo)/", rank=0, shape=plaintext];
+		gvds_atom0 [label="qr/foo/ix", rank=0, shape=plaintext];
 	}
 }
 
@@ -86,7 +80,7 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/(?-xism:foobar)/", rank=0, shape=plaintext];
+		gvds_atom0 [label="qr/foobar/", rank=0, shape=plaintext];
 	}
 }
 

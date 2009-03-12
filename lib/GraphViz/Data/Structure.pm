@@ -8,8 +8,15 @@ use Devel::Peek;
 
 our $Debug = 0;
 
+sub debug(@) {
+  return unless $Debug;
+  return unless @_;
+  print STDERR @_;
+  print "\n" unless $_[-1]=~/\n/;
+}
+
 # This is incremented every time there is a change to the API
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 # The currently-supported color palettes.
 our %palettes = (
@@ -315,8 +322,8 @@ sub new {
     # Color parameter set was specified. Override the defaults with whatever
     # was specified. Note that specifying everything is the same as defining
     # a completely new palette.
-    if (ref $params{Colors} and ref $params{Colors}) {
-      foreach my $item (keys %{$params{Colors}}) {
+    if (ref $params{Colors}) {
+      foreach my $item (sort keys %{$params{Colors}}) {
         $self->{Colors}->{$item} = $params{Colors}->{$item};
       }
     }
@@ -520,7 +527,7 @@ sub init {
 
   # If we've exceeded the depth limit, just return a plaintext "..." node.
   if (defined $self->{Depth} and $rank > $self->{Depth}) {
-    warn "Dummy node\n" if $Debug;
+    debug("Dummy node\n");
     my $node_type = sprintf("DUMMY(%08h)",$self->{Dummies}++);
     my $node_label = $node_type; 
     my $name = "gvds_dummy" . $self->{Dummies}++;
@@ -549,13 +556,16 @@ sub init {
   foreach my $node_type (defined $root ? $root."" : $root) {
     my $node_label = ref $root;
     my @to_port = ();
-    warn "Label: $node_label, Type $node_type\n" if $Debug;
+    
+    debug("Label: $node_label\n");
+    debug("Type $node_type\n") if defined $node_type;
 
     # Just a scalar, not a scalar ref. Generate a plaintext node.
     # Yes, this one *should* be node_label, not node_type.
     $node_label =~ /^$/ and do {
-      warn "Atomic node\n" if $Debug;
-      my $hookup_info = $self->{Addresses}->{$root};
+      debug("Atomic node\n");
+      my $hookup_info = undef;
+      $hookup_info = $self->{Addresses}->{$root} if defined $root;
       return @$hookup_info if defined $hookup_info;
 
       my $name = "gvds_atom" . $self->{Atoms}++;
@@ -564,17 +574,19 @@ sub init {
                                @rank,
                                shape=>"plaintext");
       $self->{NodeCache}->{$name} = [$name, ()];
-      $self->{Addresses}->{$root} = [$name, ()];
+      $self->{Addresses}->{$root} = [$name, ()] if defined $root;
       return ($name,());   # no to-port for plaintext
     };
 
     # Regexp. Generate a node for this containing the regexp text and return. 
     # Regexps are always leaf nodes. Again, this should be node_label.
     $node_label =~ /^Regexp$/ and do {
-      $node_type =~ s,/,\\/,g;
+      my($flagson, undef, $flagsoff, $regexp) = 
+        ($node_type =~ /^\(\?(.*?)(-(.*?))*?:(.*)\)$/);
+      print "Regex $node_type parsed as: $regexp (+$flagson, -$flagsoff)\n" if $Debug;
       my $name = "gvds_atom" . $self->{Atoms}++;
       $self->{Graph}-> add_node($name,
-                                label=>$self->dot_escape("qr/$node_type/"),
+                                label=>$self->dot_escape("qr/$regexp/$flagson"),
                                 @rank,
                                 shape=>"plaintext");
       $self->{NodeCache}->{name}            = [$name, ()];
@@ -583,8 +595,8 @@ sub init {
     };
 
     # Scalar reference.
-    $node_type =~ /SCALAR/ and do {
-      warn "Scalar node\n" if $Debug;
+    $node_type =~ /SCALAR|REF/ and do {
+      debug("Scalar node\n");
       my $name = "gvds_scalar" . $self->{Scalars}++;
       # If linkthrough is on, just skip this node and go down a level directly.
       # Do not increment the rank since we've skipped a level. This is needed
@@ -626,7 +638,7 @@ sub init {
     # Array reference. Generate a lst of ports as long as this array is, and
     # create the nodes under it, linking them to the proper ports.
     $node_type =~ /ARRAY/ and do {
-      warn "Array node\n" if $Debug;
+      debug("Array node\n");
       my $name = "gvds_array" . $self->{Arrays}++;
 
       # Add node for the array itself.
@@ -681,7 +693,7 @@ sub init {
     # entries  that contain references. Generate the nodes below (if any) and
     # hook them back in.
     $node_type =~ /HASH/ and do {
-      warn "Hash node\n" if $Debug;
+      debug("Hash node\n");
       my $name = "gvds_hash" . $self->{Hashes}++;
       if (scalar keys %$root == 0 && !blessed($root)) {
         # Empty hash.
@@ -730,7 +742,7 @@ sub init {
     # Code reference. We call a modified version of dumpvar.pl, then insert
     # a plaintext node containing the package and name.
     $node_type =~ /CODE/ and do {
-      warn "Code node\n" if $Debug;
+      debug("Code node\n");
       my $name = "gvds_sub" . $self->{Subs}++;
       my $label = dumpsub(0,$root);
       $self->{Graph}->add_node($name,
@@ -892,7 +904,7 @@ sub scalar_port {
     # Not blessed.
     $out = "";
   }
-  warn "$out\n" if $Debug;
+  debug("$out\n");
   $out;
 }
 
@@ -1019,7 +1031,7 @@ sub array_ports {
       $array_ports = "{<port0>$label_needed\n[Array object]|{" . (join "|", @ports) . "}}";
     }
   }
-  warn "$array_ports\n" if $Debug;
+  debug("$array_ports\n");
   $array_ports;
 }
 
@@ -1139,7 +1151,7 @@ sub hash_or_glob_ports {
   # want to show a record which shows that it's a blessed hash, but empty.
   # We use the description because that's the only thing that's different
   # by this point.
-  if (keys %$hash == 0) {
+  if (scalar keys %$hash == 0) {
     if ($label_needed) {
       # Empty, but blessed.
       return "{<port0>$label_needed$description|{(empty)}}";
@@ -1153,14 +1165,17 @@ sub hash_or_glob_ports {
 
   # Another exception: single-element unblessed hash. Just needs to go back
   # as a pair of boxes.
-  if (keys %$hash == 1 and !$label_needed) {
+  if (scalar keys %$hash == 1 and !$label_needed) {
+    # (keys %$hash)[0] gets the only key there is.
     my $cleankey = "<port1>" . $self->dot_escape((keys %$hash)[0]);
     my $cleanvalue;
     my $v = (values %$hash)[0];
     if (ref $v) {
+      # Put in the dot so dot doesn't collapse the box.
       $cleanvalue = "<port2>.";
     }
     else {
+      # There's a real value here.
       $cleanvalue = "<port2>" . $self->dot_escape($v);
     }
     my $basic;
@@ -1278,7 +1293,7 @@ sub code_label {
     # Not blessed.
     $out = "$label";
   }
-  warn "$out\n" if $Debug;
+  debug("$out\n");
   $out;
 }
 
@@ -1309,7 +1324,7 @@ sub dot_escape {
   $first .= " ..." if $rest;
   # clean up characters significant to dot
   $first =~ s/([^?\-a-zA-Z0-9.=_(){}<>\/:* \n])/\\$1/g;
-  warn "$first\n" if $Debug;
+  debug("$first\n");
   $first;
 }
 

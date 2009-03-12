@@ -6,5 +6,5 @@ WriteMakefile(
     VERSION_FROM => 'lib/GraphViz/Data/Structure.pm', # finds $VERSION
     AUTHOR       => 'Joe McMahon (mcmahon@ibiblio.org)',
     ABSTRACT     => 'Visualize Perl data structures',
-    PREREQ_PM    => {GraphViz=>1.3,Devel::Peek=>0,Test::More=>0}
+    PREREQ_PM    => {GraphViz=>1.3,Devel::Peek=>0,Test::More=>0,Scalar::Util=>0}
 );

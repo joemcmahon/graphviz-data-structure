@@ -23,13 +23,7 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
 (name => 'file glob',
@@ -62,20 +56,21 @@ __DATA__
 %%
 (name => 'file glob ref',
  code => 'my $a = \\*STDOUT; GraphViz::Data::Structure->new($a,graph=>{label=>"file glob ref"})->graph->as_canon',
- out  => qq(digraph test {
-	graph [label="file glob ref"];
-	node [label="\\N"];
+ out  => qq((fileno(1))", rank=1, shape=plaintext];
+	}
 	{
 		graph [rank=same];
 		gvds_glob0 [label="{<port0>*main::STDOUT|{{<port1>Filehandle|<port2>.}}}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
-	{
-		graph [rank=same];
-		gvds_atom0 [label="FileHandle *main::STDOUT\\n(fileno(1))", rank=1, shape=plaintext];
-	}
 	gvds_glob0:port2 -> gvds_atom0;
 }
 
+digraph test {
+	graph [label="file glob ref"];
+	node [label="\\N"];
+	{
+		graph [rank=same];
+		gvds_atom0 [label="FileHandle *main::STDOUT\
 )
 )
 %%
@@ -86,11 +81,11 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_glob0 [label="{<port0>*Foo::Bar|{{<port1>Array|<port2>.}|{<port3>Hash|<port4>.}|{<port5>Scalar|<port6>.}|{<port7>Sub|<port8>.}}}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_glob0 [label="{<port0>*Foo::Bar|{{<port1>Array|<port2>.}|{<port3>Hash|<port4>.}|{<port5>Scalar|<port6>.}|{<port7>Sub|<port8>.}}}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];

@@ -23,13 +23,7 @@ sub get_current {
    $code;
 }
 
-sub normalize {
-   my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
-}
+sub normalize {  }
 
 __DATA__
 (name => 'multi glob ref, default colors',
@@ -39,7 +33,10 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=white, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=white, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_atom0 [label="test string", rank=2, shape=plaintext];
+		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
@@ -47,10 +44,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=white, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=white, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_atom0 [label="test string", rank=2, shape=plaintext];
-		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_glob0:port2 -> gvds_array0;
 	gvds_glob0:port6 -> gvds_atom0;
@@ -69,7 +63,10 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=lightyellow, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=palevioletred, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=paleturquoise, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_atom0 [label="test string", rank=2, shape=plaintext];
+		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
@@ -77,10 +74,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=palevioletred, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=paleturquoise, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_atom0 [label="test string", rank=2, shape=plaintext];
-		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
+		gvds_scalar0 [label="", color=lightyellow, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_glob0:port2 -> gvds_array0;
 	gvds_glob0:port6 -> gvds_atom0;
@@ -99,7 +93,10 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=yellow, fontcolor=white, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=tomato, fontcolor=white, rank=2, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=cyan, fontcolor=white, rank=2, shape=record, style=filled];
+		gvds_atom0 [label="test string", rank=2, shape=plaintext];
+		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
@@ -107,10 +104,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=tomato, fontcolor=white, rank=2, shape=record, style=filled];
-		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=cyan, fontcolor=white, rank=2, shape=record, style=filled];
-		gvds_atom0 [label="test string", rank=2, shape=plaintext];
-		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
+		gvds_scalar0 [label="", color=yellow, fontcolor=white, rank=0, shape=record, style=filled];
 	}
 	gvds_glob0:port2 -> gvds_array0;
 	gvds_glob0:port6 -> gvds_atom0;
@@ -129,7 +123,10 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=indianred1, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=burlywood2, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=seagreen1, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_atom0 [label="test string", rank=2, shape=plaintext];
+		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
@@ -137,10 +134,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=burlywood2, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=seagreen1, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_atom0 [label="test string", rank=2, shape=plaintext];
-		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
+		gvds_scalar0 [label="", color=indianred1, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_glob0:port2 -> gvds_array0;
 	gvds_glob0:port6 -> gvds_atom0;
@@ -159,7 +153,10 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=indianred1, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=burlywood2, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=red, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_atom0 [label="test string", rank=2, shape=plaintext];
+		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
@@ -167,10 +164,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=burlywood2, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=red, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_atom0 [label="test string", rank=2, shape=plaintext];
-		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
+		gvds_scalar0 [label="", color=indianred1, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_glob0:port2 -> gvds_array0;
 	gvds_glob0:port6 -> gvds_atom0;
@@ -189,7 +183,10 @@ __DATA__
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=pink, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=pink, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=pink, fontcolor=black, rank=2, shape=record, style=filled];
+		gvds_atom0 [label="test string", rank=2, shape=plaintext];
+		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
 	}
 	{
 		graph [rank=same];
@@ -197,10 +194,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="{<port1>foo}|{<port2>bar}|{<port3>baz}", color=pink, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_hash0 [label="{<port1>The|<port2>Other}|{<port3>This|<port4>That}", color=pink, fontcolor=black, rank=2, shape=record, style=filled];
-		gvds_atom0 [label="test string", rank=2, shape=plaintext];
-		gvds_sub0 [label="&main::normalize", rank=2, shape=plaintext];
+		gvds_scalar0 [label="", color=pink, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	gvds_glob0:port2 -> gvds_array0;
 	gvds_glob0:port6 -> gvds_atom0;

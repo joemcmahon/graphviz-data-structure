@@ -90,7 +90,7 @@ following:
 =head1 NOTES
 
 Obviously, it would be nice if there was an easy way to get the C<Makefile.PL>
-to handle the running of C<build_tests> approriately, but there doesn't seem
+to handle the running of C<build_tests> appropriately, but there doesn't seem
 to be an easy way to do that.
 
 Always remember: you have to do a C<make> before re-running C<build_tests> 
@@ -153,6 +153,7 @@ foreach my $test ($testname) {
     # so we put some extras in as appropriate.
     $hash{'out'}  =~ s/\\/\\\\/g;
     $hash{'code'} =~ s/\\/\\\\/g;
+    $hash{'out'} = normalize($hash{'out'});
   
     # Now save it.
     push @__data__, "%%" if $first_is_out++;
@@ -192,13 +193,7 @@ sub get_current {
    \$code;
 }
 
-sub normalize {
-   my \$string = shift;
-   \$string =~ tr/\\n/ /;
-   \$string =~ s/\\s+/ /g;
-   \$string = "" if \$string eq " ";
-   \$string;
-}
+sub normalize { @_ }
 
 __DATA__
 @__data__
@@ -217,11 +212,10 @@ sub get_current {
 
 # This subroutine cleans out excess whitespace and newlines to allow the 
 # actually-obtained output to be checked agains the projected output.
-# Simpler than a lot of regex-based fiddling, and it works.
+# Simpler than a lot of regex-based fiddling, and it works. The sort is
+# necessary to deboggle the output if nodes are not output in strict order.
 sub normalize {
    my $string = shift;
-   $string =~ tr/\n/ /;
-   $string =~ s/\s+/ /g;
-   $string = "" if $string eq " ";
-   $string;
+   my @strings = split /\\n/, $string;
+   join("\n", sort @strings);
 }

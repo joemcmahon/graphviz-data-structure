@@ -4,26 +4,21 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>12;
+use Test::More tests=>9;
 
 use GraphViz::Data::Structure;
 
 ok(GraphViz::Data::Structure->can('new'), 'new() works');
-ok(GraphViz::Data::Structure->can('add'), 'new() works');
 
 my $gvds = GraphViz::Data::Structure->new(1);
 ok(defined $gvds,                            "new() returns something");
 isa_ok($gvds, 'GraphViz::Data::Structure',   "proper object");
 
 ok($gvds->can('graph'),                      "object can graph()");
-ok($gvds->can('add'),                        "object can graph()");
 ok($gvds->can('was_null'),                   "object can was_null()");
 
 my $g = $gvds->graph();
 isa_ok($g, 'GraphViz',                       "graph() returns a GraphViz");
-
-my ($gvds2) = $gvds->add(2);
-isa_ok($gvds2, 'GraphViz::Data::Structure',  "still proper after add()");
 
 $g = $gvds->graph();
 isa_ok($g, 'GraphViz',                       "still returns a GraphViz");

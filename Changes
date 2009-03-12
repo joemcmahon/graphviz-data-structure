@@ -1,10 +1,35 @@
 Change log
 
+revision 1.23
+date: 2004/08/13 18:30:12;  author: joe;  state: Exp;  lines: +21 -12
+ - replace warn with debug() for testing
+ - Change scalar ref check to be either SCALAR or REF (5.8 support)
+ - added debug() internal sub
+ - release candidate 0.08
+
+revision 1.22
+date: 2004/08/12 17:22:59;  author: joe;  state: Exp;  lines: +317 -46
+ - reverting to old algorithm (revision 1.19); dumpvar not precise enough :(
+
+revision 1.21
+date: 2004/08/11 22:09:07;  author: joe;  state: Exp;  lines: +36 -305
+ - Begin shifting to new internals
+
+revision 1.20
+date: 2004/08/11 21:46:31;  author: joe;  state: Exp;  lines: +21 -19
+ - upped version to 0.10
+ - started adding comments about change to dumpvar.pl-based version
+
+revision 1.19
+date: 2003/12/03 21:02:06;  author: joe;  state: Exp;  lines: +4 -2
+ - fixed regexp display so it looks normal.
+
 revision 1.18
  - up the version
  - add code to link through arrays as well as hashes
  - fix address cacheing for scalars so shared scalars between new() and
    add() calls are actually shared
+ - release version 0.07
 
 revision 1.17
 date: 2002/04/15 14:45:04;  author: joe;  state: Exp;  lines 0

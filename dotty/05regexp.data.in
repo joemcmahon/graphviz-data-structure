@@ -3,7 +3,7 @@
 )
 %%
 (name => 'regexp-ref',
- code => 'my $a = qr/foo/; GraphViz::Data::Structure->new(\$a,%title%)->graph->as_canon',
+ code => 'my $a = qr/.*?foo[^2]\d\w/; GraphViz::Data::Structure->new(\$a,%title%)->graph->as_canon',
 )
 %%
 (name => 'regexp-flagged',
