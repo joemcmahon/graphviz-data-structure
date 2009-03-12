@@ -17,8 +17,7 @@ sub _debug(@) {
   print "\n" unless $_[-1]=~/\n/;
 }
 
-# This is incremented every time there is a change to the API
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 # The currently-supported color palettes.
 our %palettes = (
