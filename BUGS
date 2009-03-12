@@ -20,6 +20,10 @@ endure them):
 -------------------------------------------------------------------
 GraphViz::Data::Structure bugs (FIXED):
 
+version 0.10, seventh public release
+ - added code to patch the problem in GraphViz that was causing all of
+   out complex record types to fail miserably
+
 version 0.09, sixth public release
  - found and fixed a number of bugs while testing obscure features
  - many new tests

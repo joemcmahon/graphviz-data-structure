@@ -3,6 +3,7 @@ package GraphViz::Data::Structure;
 use strict;
 use Carp;
 use lib '..';
+
 use GraphViz;
 use Devel::Peek;
 
@@ -16,7 +17,7 @@ sub debug(@) {
 }
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 # The currently-supported color palettes.
 our %palettes = (
@@ -908,7 +909,6 @@ sub scalar_port {
   debug("$out\n");
   $out;
 }
-
 =head2 ARRAYS
 
 Arrays have to be handled four different ways:
@@ -1443,6 +1443,114 @@ sub dumpglob {
   (($returns ? $returns : "GLOB"),                        # The contents
    ('*' . *$val{PACKAGE} . '::' . *$val{NAME} or 'GLOB')  # The name
   ); 
+}
+
+=begin internals
+
+=head2 add_node
+
+This function is a near-duplicate of the GraphViz 2.0 C<add_node> function;
+the only change is to the marked line which makes sure that record-style
+nodes don't have their labels escaped (which breaks all of the record 
+definitions).
+
+=end internals
+
+=cut
+
+sub add_node {
+  my $self = shift;
+  my $node = shift;
+
+  # Cope with the new simple notation
+  if (ref($node) ne 'HASH') {
+    my $name = $node;
+    my %node;
+    if (@_ % 2 == 1) {
+      # No name passed
+      %node = ($name, @_);
+    } else {
+      # Name passed
+      %node = (@_, name => $name);
+    }
+    $node = \%node;
+  }
+
+  $self->add_node_munge($node) if $self->can('add_node_munge');
+
+  # The _code attribute is our internal name for the node
+  $node->{_code} = $self->_quote_name($node->{name});
+
+  if (not exists $node->{name}) {
+    $node->{name} = $node->{_code};
+  }
+
+  if (not exists $node->{label})  {
+    if (exists $self->{NODES}->{$node->{name}} and defined $self->{NODES}->{$node->{name}}->{label}) {
+      # keep our old label if we already exist
+      $node->{label} = $self->{NODES}->{$node->{name}}->{label};
+    } else {
+      $node->{label} = $node->{name};
+    }
+  } else {
+    ### PATCH ###
+    $node->{label} =~ s#([|<>\[\]{}"])#\\$1#g 
+      unless $node->{shape} eq 'record';
+    ### END PATCH ###
+  }
+
+  delete $node->{cluster}
+    if exists $node->{cluster} && !length $node->{cluster} ;
+
+  $node->{_label} =  $node->{label};
+
+  # Deal with ports
+  if (ref($node->{label}) eq 'ARRAY') {
+    $node->{shape} = 'record'; # force a record
+    my $nports = 0;
+    $node->{label} = join '|', map
+      { $_ =~ s#([|<>\[\]{}"])#\\$1#g; '<port' . $nports++ . '>' . $_ }
+      (@{$node->{label}});
+  }
+
+  # Save ourselves
+  if (!exists($self->{NODES}->{$node->{name}})) {
+    $self->{NODES}->{$node->{name}} = $node;
+  } else {
+    # If the node already exists, add or overwrite attributes.
+    foreach (keys %$node) {
+      $self->{NODES}->{$node->{name}}->{$_} = $node->{$_};
+    }
+  }
+
+  $self->{CODES}->{$node->{_code}} = $node->{name};
+  $self->{GRAPH}->add_vertex($node->{name});
+
+  foreach my $key (keys %$node) {
+    $self->{GRAPH}->set_attribute($key, $node->{name}, $node->{$key});
+  }
+
+  # Add the node to the nodelist, which contains the names of
+  # all the nodes in the order that they were inserted (but only
+  # if it's not already there)
+  push @{$self->{NODELIST}}, $node->{name} unless
+    grep { $_ eq $node->{name} } @{$self->{NODELIST}};
+
+  return $node->{name};
+}
+
+# GraphViz version 2.0 has a bug that causes the special labels for 
+# record shapes to be escaped even though the shouldn't be. This BEGIN
+# block checks for that bug and patches around it.
+
+BEGIN {
+  my $g = new GraphViz;
+  $g->add_node(shape=>"record", label=>"{<port1>1}");
+  my $s=$g->as_canon;
+  if ($s=~m[\\{\\<port1\\>1\\}]s) {
+    local $^W = 0;
+    *GraphViz::add_node = \&add_node;
+  }
 }
 
 =head1 BUGS

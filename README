@@ -8,7 +8,6 @@ Copyright
    it and/or modify it under the same terms as Perl itself. 
 
 Prerequisites
- - IPC::Run for rebuilding the test suite
  - Test::More for running the test suite
  - GraphViz for actually rendering the graphs
 
@@ -24,3 +23,6 @@ Building it
 
    perl Makefile.PL PREFIX=~
 
+Note: GraphViz 2.0 changed the way it was previously handling nodes with shape=record.
+      A patch to restore the old behavior has been passed along to Leon, but until
+      he cab get it in, GraphViz::Data::Structure handles doing the patch itself.
