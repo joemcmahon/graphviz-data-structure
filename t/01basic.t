@@ -28,4 +28,7 @@ my @a;
 @a = (1,\@a,2);
 $gvds = GraphViz::Data::Structure->new(\@a);
 isa_ok($gvds, 'GraphViz::Data::Structure',   "weird structure returns object");
+TODO: {
+ local $TODO = "Some dot implementations can't handle self-ref array elements"; 
 ok($gvds->was_null(),                        "dot broken as expected");
+}

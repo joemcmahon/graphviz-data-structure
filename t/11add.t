@@ -27,9 +27,11 @@ sub normalize {  }
 
 __DATA__
 (name => 'ad subbing for new',
- code => 'my ($a); $a=[1,2,4,8]; my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"ad subbing for new"})->graph->as_canon',
+ code => 'my ($a); 
+          $a=[1,2,4,8]; 
+          my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"ad subbing for new"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="ad subbing for new"];
+	graph [ratio=fill, label="ad subbing for new"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -46,9 +48,13 @@ __DATA__
 )
 %%
 (name => 'add actually adding',
- code => 'my ($a); $a=[1,2,4,8]; my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"add actually adding"}); my $b=[10,20,30]; my $w = $z->add($b)->graph->as_canon',
+ code => 'my ($a); 
+          $a=[1,2,4,8]; 
+          my $z = GraphViz::Data::Structure->new(\\$a,graph=>{label=>"add actually adding"}); 
+          my $b=[10,20,30]; 
+          my $w = $z->add($b)->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="add actually adding"];
+	graph [ratio=fill, label="add actually adding"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -66,14 +72,15 @@ __DATA__
 )
 %%
 (name => 'tie it together',
- code => 'my ($a); $a=[1,2,4,8]; 
+ code => 'my ($a); 
+          $a=[1,2,4,8]; 
          my $z = GraphViz::Data::Structure->new($a,graph=>{label=>"tie it together"}); 
          my $b=[10,20,30]; 
          $z->add($b); 
          my $c=[$a,$b]; 
          $z->add($c)->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="tie it together"];
+	graph [ratio=fill, label="tie it together"];
 	node [label="\\N"];
 	{
 		graph [rank=same];

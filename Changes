@@ -1,5 +1,14 @@
 Change log
 
+0.14  Mon Sep 26 12:40:51 2005
+	- added pod tests to MANIFEST so they would get distributed (oops)
+	- added TODO in basic.t (dot bug fixed in some versions of dot)
+        - changed make_all.pl to just use 'perl' instead of a full path;
+	  this makes sure that the Perls used to build agree.
+        - Added graphviz version test for non-broken version of dot in
+	  Makefile.PL
+	- Added test for dot being installed at all in Makefile.PL
+
 0.13  Fri Sep  9 11:51:24 PDT 2005 
 	- switch to new changelog format
 	- added pod tests

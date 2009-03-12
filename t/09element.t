@@ -27,23 +27,35 @@ sub normalize {  }
 
 __DATA__
 (name => 'array ref to self',
- code => '@a= (1,\\@a,3);GraphViz::Data::Structure->new(\\@a,graph=>{label=>"array ref to self"})->graph->as_canon',
- out  => qq(
+ code => '@a= (1,\\@a,3);
+          GraphViz::Data::Structure->new(\\@a,graph=>{label=>"array ref to self"})->graph->as_canon',
+ out  => qq(digraph test {
+	graph [ratio=fill, label="array ref to self"];
+	node [label="\\N"];
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>1}|{<port2>.}|{<port3>3}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+	}
+	gvds_array0:port2 -> gvds_array0;
+}
+
 )
 )
 %%
 (name => 'scalar ref to array element',
- code => '@a=(1,2,3); $a=\\$a[2];GraphViz::Data::Structure->new($a,graph=>{label=>"scalar ref to array element"})->graph->as_canon',
+ code => '@a=(1,2,3); 
+          $a=\\$a[2];
+          GraphViz::Data::Structure->new($a,graph=>{label=>"scalar ref to array element"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="scalar ref to array element"];
+	graph [ratio=fill, label="scalar ref to array element"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label=3, rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label=3, rank=1, shape=plaintext];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }
@@ -52,9 +64,10 @@ __DATA__
 )
 %%
 (name => 'hash ref to self',
- code => '%refhash=(Self=>\\%refhash);GraphViz::Data::Structure->new(\\%refhash,graph=>{label=>"hash ref to self"})->graph->as_canon',
+ code => '%refhash=(Self=>\\%refhash);
+          GraphViz::Data::Structure->new(\\%refhash,graph=>{label=>"hash ref to self"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="hash ref to self"];
+	graph [ratio=fill, label="hash ref to self"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -67,17 +80,19 @@ __DATA__
 )
 %%
 (name => 'scalar ref to hash element',
- code => '%refhash=(One=>1,Two=>2);$a=\\$refhash{One};GraphViz::Data::Structure->new($a,graph=>{label=>"scalar ref to hash element"})->graph->as_canon',
+ code => '%refhash=(One=>1,Two=>2);
+          $a=\\$refhash{One};
+          GraphViz::Data::Structure->new($a,graph=>{label=>"scalar ref to hash element"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="scalar ref to hash element"];
+	graph [ratio=fill, label="scalar ref to hash element"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
-		gvds_atom0 [label=1, rank=1, shape=plaintext];
+		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
 	}
 	{
 		graph [rank=same];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+		gvds_atom0 [label=1, rank=1, shape=plaintext];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }
@@ -86,7 +101,20 @@ __DATA__
 )
 %%
 (name => 'complex case',
- code => '@a=(1,2); $a[0]=\\@a; $a[1]=\\$a[0]; GraphViz::Data::Structure->new(\\@a,graph=>{label=>"complex case"})->graph->as_canon',
- out  => qq(
+ code => '@a=(1,2); 
+          $a[0]=\\@a; 
+          $a[1]=\\$a[0]; 
+          GraphViz::Data::Structure->new(\\@a,graph=>{label=>"complex case"})->graph->as_canon',
+ out  => qq(digraph test {
+	graph [ratio=fill, label="complex case"];
+	node [label="\\N"];
+	{
+		graph [rank=same];
+		gvds_array0 [label="{<port1>.}|{<port2>.}", color=white, fontcolor=black, rank=0, shape=record, style=filled];
+	}
+	gvds_array0:port1 -> gvds_array0;
+	gvds_array0:port2 -> gvds_array0:port1;
+}
+
 )
 )

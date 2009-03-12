@@ -9,7 +9,7 @@ my($in, $out, $err);
 
 foreach my $file (sort <*.data.in>) {
   print "  Running $file...";
-  system "/usr/bin/perl ./build_test ./$file @ARGV";
+  system "perl ./build_test ./$file @ARGV";
   print "done\n";
 }
 

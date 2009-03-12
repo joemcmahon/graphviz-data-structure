@@ -27,9 +27,10 @@ sub normalize {  }
 
 __DATA__
 (name => 'file glob',
- code => 'my $a = *STDOUT; GraphViz::Data::Structure->new($a,graph=>{label=>"file glob"})->graph->as_canon',
+ code => 'my $a = *STDOUT; 
+          GraphViz::Data::Structure->new($a,graph=>{label=>"file glob"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="file glob"];
+	graph [ratio=fill, label="file glob"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -41,9 +42,10 @@ __DATA__
 )
 %%
 (name => 'empty glob ref',
- code => 'my $a = \\*FOO; GraphViz::Data::Structure->new($a,graph=>{label=>"empty glob ref"})->graph->as_canon',
+ code => 'my $a = \\*FOO; 
+          GraphViz::Data::Structure->new($a,graph=>{label=>"empty glob ref"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="empty glob ref"];
+	graph [ratio=fill, label="empty glob ref"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -55,14 +57,15 @@ __DATA__
 )
 %%
 (name => 'file glob ref',
- code => 'my $a = \\*STDOUT; GraphViz::Data::Structure->new($a,graph=>{label=>"file glob ref"})->graph->as_canon',
+ code => 'my $a = \\*STDOUT; 
+          GraphViz::Data::Structure->new($a,graph=>{label=>"file glob ref"})->graph->as_canon',
  out  => qq((fileno(1))", rank=1, shape=plaintext];
 	}
 	gvds_glob0:port2 -> gvds_atom0;
 }
 
 digraph test {
-	graph [label="file glob ref"];
+	graph [ratio=fill, label="file glob ref"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -75,9 +78,18 @@ digraph test {
 )
 %%
 (name => 'multi glob ref',
- code => 'my ($a,$b,@c,%d); $a=\\*Foo::Bar; *Foo::Bar=\\&normalize; *Foo::Bar=\\$b; $b="test string"; *Foo::Bar = \\@c; @c=qw(foo bar baz); *Foo::Bar = \\%d; %d = (This=>That,The=>Other);  GraphViz::Data::Structure->new(\\$a,graph=>{label=>"multi glob ref"})->graph->as_canon',
+ code => 'my ($a,$b,@c,%d); 
+          $a=\\*Foo::Bar; 
+          *Foo::Bar=\\&normalize; 
+          *Foo::Bar=\\$b; 
+          $b="test string"; 
+          *Foo::Bar = \\@c; 
+          @c=qw(foo bar baz); 
+          *Foo::Bar = \\%d; 
+          %d = (This=>That,The=>Other);  
+          GraphViz::Data::Structure->new(\\$a,graph=>{label=>"multi glob ref"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="multi glob ref"];
+	graph [ratio=fill, label="multi glob ref"];
 	node [label="\\N"];
 	{
 		graph [rank=same];

@@ -29,7 +29,7 @@ __DATA__
 (name => 'ref to zero-element hash',
  code => 'GraphViz::Data::Structure->new(\\{},graph=>{label=>"ref to zero-element hash"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="ref to zero-element hash"];
+	graph [ratio=fill, label="ref to zero-element hash"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -37,7 +37,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_hash0 [label="{}", rank=1, shape=plaintext];
+		gvds_hash0 [label="\\{\\}", rank=1, shape=plaintext];
 	}
 	gvds_scalar0 -> gvds_hash0;
 }
@@ -48,7 +48,7 @@ __DATA__
 (name => 'ref to one-element hash',
  code => 'GraphViz::Data::Structure->new(\\{"test"=>"me"},graph=>{label=>"ref to one-element hash"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="ref to one-element hash"];
+	graph [ratio=fill, label="ref to one-element hash"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -65,9 +65,10 @@ __DATA__
 )
 %%
 (name => 'ref to three-element hash',
- code => 'GraphViz::Data::Structure->new(\\{"larry"=>"fuzz","moe"=>"mop","curly"=>"none"},graph=>{label=>"ref to three-element hash"})->graph->as_canon',
+ code => 'GraphViz::Data::Structure->new(\\{"larry"=>"fuzz","moe"=>"mop","curly"=>"none"},
+        graph=>{label=>"ref to three-element hash"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="ref to three-element hash"];
+	graph [ratio=fill, label="ref to three-element hash"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -84,9 +85,10 @@ __DATA__
 )
 %%
 (name => 'ref to vertical three-element hash',
- code => 'GraphViz::Data::Structure->new(\\{"larry"=>"fuzz","moe"=>"mop","curly"=>"none"},Orientation=>"vertical",graph=>{label=>"ref to vertical three-element hash"})->graph->as_canon',
+ code => 'GraphViz::Data::Structure->new(\\{"larry"=>"fuzz","moe"=>"mop","curly"=>"none"},
+        Orientation=>"vertical",graph=>{label=>"ref to vertical three-element hash"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [rankdir=LR, label="ref to vertical three-element hash"];
+	graph [rankdir=LR, ratio=fill, label="ref to vertical three-element hash"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -103,9 +105,10 @@ __DATA__
 )
 %%
 (name => 'single-element hash ref to empty arrays',
- code => 'my %a=(Empty=>[]); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to empty arrays"})->graph->as_canon',
+ code => 'my %a=(Empty=>[]); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to empty arrays"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="single-element hash ref to empty arrays"];
+	graph [ratio=fill, label="single-element hash ref to empty arrays"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -113,7 +116,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="[]", rank=1, shape=plaintext];
+		gvds_array0 [label="\\[\\]", rank=1, shape=plaintext];
 	}
 	gvds_hash0:port2 -> gvds_array0;
 }
@@ -122,9 +125,10 @@ __DATA__
 )
 %%
 (name => 'three-element hash ref to empty arrays',
- code => 'my %a=(Nil=>[],Nada=>[],Zip=>[]); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to empty arrays"})->graph->as_canon',
+ code => 'my %a=(Nil=>[],Nada=>[],Zip=>[]); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to empty arrays"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="three-element hash ref to empty arrays"];
+	graph [ratio=fill, label="three-element hash ref to empty arrays"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -132,9 +136,9 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_array0 [label="[]", rank=1, shape=plaintext];
-		gvds_array1 [label="[]", rank=1, shape=plaintext];
-		gvds_array2 [label="[]", rank=1, shape=plaintext];
+		gvds_array0 [label="\\[\\]", rank=1, shape=plaintext];
+		gvds_array1 [label="\\[\\]", rank=1, shape=plaintext];
+		gvds_array2 [label="\\[\\]", rank=1, shape=plaintext];
 	}
 	gvds_hash0:port2 -> gvds_array0;
 	gvds_hash0:port4 -> gvds_array1;
@@ -145,9 +149,10 @@ __DATA__
 )
 %%
 (name => 'single-element hash ref to one-element arrays',
- code => 'my %a=(Pointer=>["test"]); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to one-element arrays"})->graph->as_canon',
+ code => 'my %a=(Pointer=>["test"]); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to one-element arrays"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="single-element hash ref to one-element arrays"];
+	graph [ratio=fill, label="single-element hash ref to one-element arrays"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -164,9 +169,10 @@ __DATA__
 )
 %%
 (name => 'three-element hash ref to one-element arrays',
- code => 'my %a=(Fuzz=>["larry"],Mop=>["moe"],Bald=>["curly"]); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to one-element arrays"})->graph->as_canon',
+ code => 'my %a=(Fuzz=>["larry"],Mop=>["moe"],Bald=>["curly"]); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to one-element arrays"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="three-element hash ref to one-element arrays"];
+	graph [ratio=fill, label="three-element hash ref to one-element arrays"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -187,9 +193,10 @@ __DATA__
 )
 %%
 (name => 'single-element hash ref to three-element arrays',
- code => 'my %a=(Stooges=>["larry","moe","curly"]); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to three-element arrays"})->graph->as_canon',
+ code => 'my %a=(Stooges=>["larry","moe","curly"]); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to three-element arrays"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="single-element hash ref to three-element arrays"];
+	graph [ratio=fill, label="single-element hash ref to three-element arrays"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -206,9 +213,12 @@ __DATA__
 )
 %%
 (name => 'three-element hash ref to three-element arrays',
- code => 'my %a=(Stooges=>["larry","moe","curly"],MarxBros=>["groucho","harpo","chico"],Goons=>["seagoon","bloodnok","eccles"]); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to three-element arrays"})->graph->as_canon',
+ code => 'my %a=(Stooges=>["larry","moe","curly"],
+               MarxBros=>["groucho","harpo","chico"],
+               Goons=>["seagoon","bloodnok","eccles"]); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to three-element arrays"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="three-element hash ref to three-element arrays"];
+	graph [ratio=fill, label="three-element hash ref to three-element arrays"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -229,9 +239,10 @@ __DATA__
 )
 %%
 (name => 'single-element hash ref to empty hashes',
- code => 'my %a=(Nil=>{}); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to empty hashes"})->graph->as_canon',
+ code => 'my %a=(Nil=>{}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to empty hashes"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="single-element hash ref to empty hashes"];
+	graph [ratio=fill, label="single-element hash ref to empty hashes"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -239,7 +250,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_hash1 [label="{}", rank=1, shape=plaintext];
+		gvds_hash1 [label="\\{\\}", rank=1, shape=plaintext];
 	}
 	gvds_hash0:port2 -> gvds_hash1;
 }
@@ -248,9 +259,10 @@ __DATA__
 )
 %%
 (name => 'three-element hash ref to empty hashes',
- code => 'my %a=(Nada=>{},Zilch=>{},Zip=>{}); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to empty hashes"})->graph->as_canon',
+ code => 'my %a=(Nada=>{},Zilch=>{},Zip=>{}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to empty hashes"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="three-element hash ref to empty hashes"];
+	graph [ratio=fill, label="three-element hash ref to empty hashes"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -258,9 +270,9 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_hash1 [label="{}", rank=1, shape=plaintext];
-		gvds_hash2 [label="{}", rank=1, shape=plaintext];
-		gvds_hash3 [label="{}", rank=1, shape=plaintext];
+		gvds_hash1 [label="\\{\\}", rank=1, shape=plaintext];
+		gvds_hash2 [label="\\{\\}", rank=1, shape=plaintext];
+		gvds_hash3 [label="\\{\\}", rank=1, shape=plaintext];
 	}
 	gvds_hash0:port2 -> gvds_hash1;
 	gvds_hash0:port4 -> gvds_hash2;
@@ -271,9 +283,10 @@ __DATA__
 )
 %%
 (name => 'single-element hash ref to one-element hashes',
- code => 'my %a=(One=>{"test"=>"2"}); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to one-element hashes"})->graph->as_canon',
+ code => 'my %a=(One=>{"test"=>"2"}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to one-element hashes"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="single-element hash ref to one-element hashes"];
+	graph [ratio=fill, label="single-element hash ref to one-element hashes"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -290,9 +303,12 @@ __DATA__
 )
 %%
 (name => 'three-element hash ref to one-element hashes',
- code => 'my %a=(One=>{"larry"=>"fuzz"},Two=>{"moe"=>"mop"},Three=>{"curly"=>"none"}); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to one-element hashes"})->graph->as_canon',
+ code => 'my %a=(One=>{"larry"=>"fuzz"},
+               Two=>{"moe"=>"mop"},
+               Three=>{"curly"=>"none"}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to one-element hashes"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="three-element hash ref to one-element hashes"];
+	graph [ratio=fill, label="three-element hash ref to one-element hashes"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -313,9 +329,10 @@ __DATA__
 )
 %%
 (name => 'single-element hash ref to three-element hashes',
- code => 'my %a=(Stooges=>{"larry"=>"fuzz","moe"=>"mop","curly"=>"none"}); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to three-element hashes"})->graph->as_canon',
+ code => 'my %a=(Stooges=>{"larry"=>"fuzz","moe"=>"mop","curly"=>"none"}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"single-element hash ref to three-element hashes"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="single-element hash ref to three-element hashes"];
+	graph [ratio=fill, label="single-element hash ref to three-element hashes"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -332,9 +349,12 @@ __DATA__
 )
 %%
 (name => 'three-element hash ref to three-element hashes',
- code => 'my %a=(Stooges=>{"larry"=>1,"moe"=>2,"curly"=>3},MarxBros=>{"groucho"=>1,"harpo"=>2,"chico"=>3},Goons=>{"seagoon"=>1,"bloodnok"=>2,"eccles"=>3}); GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to three-element hashes"})->graph->as_canon',
+ code => 'my %a=(Stooges=>{"larry"=>1,"moe"=>2,"curly"=>3},
+               MarxBros=>{"groucho"=>1,"harpo"=>2,"chico"=>3},
+               Goons=>{"seagoon"=>1,"bloodnok"=>2,"eccles"=>3}); 
+        GraphViz::Data::Structure->new(\\%a,graph=>{label=>"three-element hash ref to three-element hashes"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="three-element hash ref to three-element hashes"];
+	graph [ratio=fill, label="three-element hash ref to three-element hashes"];
 	node [label="\\N"];
 	{
 		graph [rank=same];

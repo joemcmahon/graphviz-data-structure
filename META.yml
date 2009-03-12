@@ -1,12 +1,12 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         GraphViz-Data-Structure
-version:      0.13
+version:      0.14
 version_from: lib/GraphViz/Data/Structure.pm
 installdirs:  site
 requires:
     Devel::Peek:                   0
-    GraphViz:                      2.01
+    GraphViz:                      2.02
     Test::More:                    0
 
 distribution_type: module

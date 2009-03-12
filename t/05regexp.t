@@ -27,9 +27,10 @@ sub normalize {  }
 
 __DATA__
 (name => 'regexp-textual',
- code => 'my $a = qr/foo/; GraphViz::Data::Structure->new($a,graph=>{label=>"regexp-textual"})->graph->as_canon',
+ code => 'my $a = qr/foo/; 
+          GraphViz::Data::Structure->new($a,graph=>{label=>"regexp-textual"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="regexp-textual"];
+	graph [ratio=fill, label="regexp-textual"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -41,9 +42,10 @@ __DATA__
 )
 %%
 (name => 'regexp-ref',
- code => 'my $a = qr/.*?foo[^2]\\d\\w/; GraphViz::Data::Structure->new(\\$a,graph=>{label=>"regexp-ref"})->graph->as_canon',
+ code => 'my $a = qr/.*?foo[^2]\\d\\w/; 
+          GraphViz::Data::Structure->new(\\$a,graph=>{label=>"regexp-ref"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="regexp-ref"];
+	graph [ratio=fill, label="regexp-ref"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -51,7 +53,7 @@ __DATA__
 	}
 	{
 		graph [rank=same];
-		gvds_atom0 [label="qr/.*?foo\\[\\^2\\]\\\\d\\\\w/", rank=1, shape=plaintext];
+		gvds_atom0 [label="qr/.*?foo\\\\[\\^2\\\\]\\\\d\\\\w/", rank=1, shape=plaintext];
 	}
 	gvds_scalar0 -> gvds_atom0;
 }
@@ -60,9 +62,10 @@ __DATA__
 )
 %%
 (name => 'regexp-flagged',
- code => 'my $a = qr/foo/ix; GraphViz::Data::Structure->new($a,graph=>{label=>"regexp-flagged"})->graph->as_canon',
+ code => 'my $a = qr/foo/ix; 
+          GraphViz::Data::Structure->new($a,graph=>{label=>"regexp-flagged"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="regexp-flagged"];
+	graph [ratio=fill, label="regexp-flagged"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
@@ -74,9 +77,10 @@ __DATA__
 )
 %%
 (name => 'regexp-interpolated',
- code => 'my $b="bar";my $a = qr/foo$b/; GraphViz::Data::Structure->new($a,graph=>{label=>"regexp-interpolated"})->graph->as_canon',
+ code => 'my $b="bar";my $a = qr/foo$b/; 
+          GraphViz::Data::Structure->new($a,graph=>{label=>"regexp-interpolated"})->graph->as_canon',
  out  => qq(digraph test {
-	graph [label="regexp-interpolated"];
+	graph [ratio=fill, label="regexp-interpolated"];
 	node [label="\\N"];
 	{
 		graph [rank=same];
