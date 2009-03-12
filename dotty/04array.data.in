@@ -65,7 +65,3 @@
 (name=>'verify port assignments',
  code=>'my @a=(Nil=>[],Nada=>[],Zip=>[]); GraphViz::Data::Structure->new(\@a,%title%)->graph->as_canon',
 )
-%%
-(name=>'verify circular links',
- code=>'my @a; @a=(\@a,\\@a,\\\@a); GraphViz::Data::Structure->new(\@a,%title%)->graph->as_canon',
-)

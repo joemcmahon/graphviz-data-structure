@@ -1,5 +1,11 @@
 Change log
 
+revision 1.18
+ - up the version
+ - add code to link through arrays as well as hashes
+ - fix address cacheing for scalars so shared scalars between new() and
+   add() calls are actually shared
+
 revision 1.17
 date: 2002/04/15 14:45:04;  author: joe;  state: Exp;  lines 0
  - fix 02types.data.in to not use localtime to generate test data 

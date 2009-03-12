@@ -1,0 +1,15 @@
+(name => 'refs to scalars, new',
+ code => '@a=(); foreach (qw(this is a test)){push @a,\$_}; GraphViz::Data::Structure->new(\@a,%title%)->graph->as_canon',
+)
+%%
+(name => 'refs to scalars, add',
+ code => '@a=(); foreach (qw(this is a test)){push @a,\$_}; $gvds=GraphViz::Data::Structure->new(); $gvds->add(\@a,%title%); $gvds->graph->as_canon',
+)
+%%
+(name => 'refs to scalars, two arrays, new+add',
+ code => '@a=(); foreach (qw(this is a test)){push @a,\$_}; @b=(); foreach (sort @a) {push @b,$_}; $gvds=GraphViz::Data::Structure->new(\@a,%title%);$gvds->add(\@b); $gvds->graph->as_canon',
+)
+%%
+(name => 'refs to scalars, two arrays, add+add',
+ code => '@a=(); foreach (qw(this is a test)){push @a,\$_}; @b=(); foreach (sort @a) {push @b,$_}; $gvds=GraphViz::Data::Structure->new();$gvds->add(\@a,%title%);$gvds->add(\@b);$gvds->graph->as_canon',
+)

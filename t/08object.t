@@ -491,19 +491,12 @@ __DATA__
 		graph [rank=same];
 		gvds_array1 [label="<port1>1", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash0 [label="{<port1>Two|<port2>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
-		gvds_scalar1 [label="{{<port0>Bar\\n[Scalar object]}|{<port1>.}}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_atom0 [label=3, rank=1, shape=plaintext];
 	}
-	{
-		graph [rank=same];
-		gvds_atom0 [label=3, rank=2, shape=plaintext];
-	}
+	gvds_array0:port4 -> gvds_array0:port0;
 	gvds_array0:port1 -> gvds_array1;
+	gvds_array0:port3 -> gvds_atom0;
 	gvds_array0:port2 -> gvds_hash0;
-	gvds_array0:port3 -> gvds_scalar0;
-	gvds_array0:port4 -> gvds_scalar1:port0;
-	gvds_scalar0 -> gvds_atom0;
-	gvds_scalar1:port1 -> gvds_array0:port0;
 }
 
 )
@@ -522,19 +515,12 @@ __DATA__
 		graph [rank=same];
 		gvds_array1 [label="<port1>1", color=white, fontcolor=black, rank=1, shape=record, style=filled];
 		gvds_hash0 [label="{<port1>Two|<port2>2}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
-		gvds_scalar0 [label="", color=white, fontcolor=black, rank=1, shape=record, style=filled];
-		gvds_scalar1 [label="{{<port0>Bar\\n[Scalar object]}|{<port1>.}}", color=white, fontcolor=black, rank=1, shape=record, style=filled];
+		gvds_atom0 [label=3, rank=1, shape=plaintext];
 	}
-	{
-		graph [rank=same];
-		gvds_atom0 [label=3, rank=2, shape=plaintext];
-	}
+	gvds_array0:port4 -> gvds_array0:port0;
 	gvds_array0:port1 -> gvds_array1;
+	gvds_array0:port3 -> gvds_atom0;
 	gvds_array0:port2 -> gvds_hash0;
-	gvds_array0:port3 -> gvds_scalar0;
-	gvds_array0:port4 -> gvds_scalar1:port0;
-	gvds_scalar0 -> gvds_atom0;
-	gvds_scalar1:port1 -> gvds_array0:port0;
 }
 
 )

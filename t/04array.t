@@ -4,7 +4,7 @@ BEGIN {
   unshift @INC,'../lib';
 }
 
-use Test::More tests=>18;
+use Test::More tests=>17;
 use GraphViz::Data::Structure;
 
 while (my $current = get_current()) {
@@ -379,11 +379,5 @@ __DATA__
 	gvds_array0:port6 -> gvds_array3;
 }
 
-)
-)
-%%
-(name => 'verify circular links',
- code => 'my @a; @a=(\\@a,\\@a,\\\\@a); GraphViz::Data::Structure->new(\\@a,graph=>{label=>"verify circular links"})->graph->as_canon',
- out  => qq(
 )
 )

@@ -14,6 +14,7 @@ dotty/07globs.data.in
 dotty/08object.data.in
 dotty/09element.data.in
 dotty/10color.data.in
+dotty/11add.data.in
 dotty/README
 dotty/build_test
 dotty/make_all.pl
@@ -29,4 +30,5 @@ t/07globs.t
 t/08object.t
 t/09element.t
 t/10color.t
+t/11add.t
 t/README

@@ -9,7 +9,7 @@ use Devel::Peek;
 our $Debug = 0;
 
 # This is incremented every time there is a change to the API
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 # The currently-supported color palettes.
 our %palettes = (
@@ -542,7 +542,7 @@ sub init {
   # If this item is already in the addresses cache, we've visualized it
   # already. Find the node and port information and just return that.
   my $hookup_info = $self->{Addresses}->{address($ref)};
-  return @$hookup_info if $hookup_info;
+  return @$hookup_info if defined $hookup_info;
 
   # Figure out what the node is. Just ref() won't do, as it doesn't tell you
   # what the referent is if it's an object.
@@ -555,13 +555,16 @@ sub init {
     # Yes, this one *should* be node_label, not node_type.
     $node_label =~ /^$/ and do {
       warn "Atomic node\n" if $Debug;
+      my $hookup_info = $self->{Addresses}->{$root};
+      return @$hookup_info if defined $hookup_info;
+
       my $name = "gvds_atom" . $self->{Atoms}++;
       $self->{Graph}->add_node($name,
                                label=>$self->dot_escape($root),
                                @rank,
                                shape=>"plaintext");
-      $self->{NodeCache}->{$name} = [$name];
-      $self->{Addresses}->{address(\$root)} = [$name, ()];
+      $self->{NodeCache}->{$name} = [$name, ()];
+      $self->{Addresses}->{$root} = [$name, ()];
       return ($name,());   # no to-port for plaintext
     };
 
@@ -574,8 +577,8 @@ sub init {
                                 label=>$self->dot_escape("qr/$node_type/"),
                                 @rank,
                                 shape=>"plaintext");
-      $self->{NodeCache}->{name} = [$name];
-      $self->{Addresses}->{address(\$root)} = [$name,()];
+      $self->{NodeCache}->{name}            = [$name, ()];
+      $self->{Addresses}->{address(\$root)} = [$name, ()];
       return ($name,());   # no to-port for plaintext
     };
 
@@ -586,8 +589,9 @@ sub init {
       # If linkthrough is on, just skip this node and go down a level directly.
       # Do not increment the rank since we've skipped a level. This is needed
       # because hashes seem to generate an extra scalar node internally when
-      # references are stored in a hash element; linkthru elimnates this from
-      # the graph. The result is not 100% accurate, but it is more readable.
+      # references are stored in aggregate elementis; linkthru elimnates this 
+      # from the graph. The result is not 100% accurate, but it is more 
+      # readable.
       return $self->init($$root, $rank) if defined $linkthru;
 
       # Add the node for the scalar itself.
@@ -600,7 +604,7 @@ sub init {
                                @rank);
       @to_port = blessed($root) ? ('to_port' => 0) : ();
       my @from_port = blessed($root) ? ('from_port' => 1) : ();
-      $self->{NodeCache}->{$node_type} = [$name, @to_port];
+      $self->{NodeCache}->{$node_type}     = [$name, @to_port];
       $self->{Addresses}->{address($root)} = [$name, @to_port];
  
       # Visualize nodes under this one. If the item pointed to is an element of
@@ -645,7 +649,7 @@ sub init {
                                  );
       }
       my @to_port = blessed($root) ? ('to_port' => 0) : ();
-      $self->{NodeCache}->{$node_type} = [$name, @to_port];
+      $self->{NodeCache}->{$node_type}     = [$name, @to_port];
       $self->{Addresses}->{address($root)} = [$name, @to_port];
 
       # For each entry in the array that's a reference, crawl down
@@ -662,7 +666,7 @@ sub init {
            [$name, ('to_port' => $port)];
          if (ref $root->[$subnode]) {
            my ($subnode_name,@to_port) = 
-             $self->init($root->[$subnode], $rank+1);
+             $self->init($root->[$subnode], $rank+1, "link through");
            $self->{Graph}-> add_edge($name=> $subnode_name,
                                      'from_port'=>"$port", 
                                      @to_port);
@@ -699,7 +703,7 @@ sub init {
                                  );
       }
       my @to_port = blessed($root) ? ('to_port' => 0) : ();
-      $self->{NodeCache}->{$node_type} = [$name, @to_port];
+      $self->{NodeCache}->{$node_type}     = [$name, @to_port];
       $self->{Addresses}->{address($root)} = [$name, @to_port];
 
       my $port = 2;
@@ -733,7 +737,7 @@ sub init {
                                label=>$self->code_label($root, $label),
                                @rank,
                                shape=>"plaintext");
-      $self->{NodeCache}->{$name} = [$name];  
+      $self->{NodeCache}->{$name}          = [$name, ()];  
       $self->{Addresses}->{address($root)} = [$name, ()];
       return ($name,());   # no to-port for plaintext
     };
@@ -754,7 +758,7 @@ sub init {
 				  shape=> "record"
                                   );
 	my @to_port = ('to_port' => 0);  # the fake hash is always blessed
-	$self->{NodeCache}->{$name} = [$name,@to_port];	
+	$self->{NodeCache}->{$name}               = [$name, @to_port];	
         $self->{Addresses}->{address($fake_glob)} = [$name, @to_port];
 
 	# Now take the "glob" apart.
@@ -784,9 +788,9 @@ sub init {
                                  label=>$self->code_label($root, $label),
                                  @rank,
                                  shape=>"plaintext");
-        $self->{NodeCache}->{$name} = [$name];
+        $self->{NodeCache}->{$name}          = [$name, ()];
         $self->{Addresses}->{address($root)} = [$name, ()];
-        return ($name,());   # no to-port for plaintext
+        return ($name, ());   # no to-port for plaintext
       }
     };
   }
@@ -828,6 +832,7 @@ cache.
 
 sub address {
     my $ref = shift;
+    return $ref unless ref $ref;
     $ref =~ /(0x[0-9a-f]+)/;
     $1;
 }
