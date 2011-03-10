@@ -17,7 +17,7 @@ sub _debug(@) {
   print "\n" unless $_[-1]=~/\n/;
 }
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 # The currently-supported color palettes.
 our %palettes = (

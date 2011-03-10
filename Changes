@@ -1,5 +1,8 @@
 Change log
 
+0.18  Wed Mar  9 21:35:23 PST 2011
+	- Updated graphviz package version check
+
 0.17  Thu Sep 13 11:37:06 PDT 2007
 	- Fix bug that wouldn't allow install with sub-versioned (e.g.,
           2.14.03) versions of graphviz; fix from Roy Fulbright 
