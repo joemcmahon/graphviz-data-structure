@@ -1,5 +1,6 @@
 Change log
-
+0.19  Fri Jan 25 19:24:15 PST 2013
+    - Updated META.yml
 0.18  Wed Mar  9 21:35:23 PST 2011
 	- Updated graphviz package version check
 
